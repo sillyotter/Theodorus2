@@ -119,6 +119,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Interfaces\IAboutDialogService.cs" />
+    <Compile Include="Support\DefaultStatusListener.cs" />
+    <Compile Include="Support\DefaultStatusReporter.cs" />
+    <Compile Include="Support\ExecutionStatus.cs" />
+    <Compile Include="Interfaces\IStatusListener.cs" />
+    <Compile Include="Interfaces\IStatusReporter.cs" />
+    <Compile Include="Support\StatusReport.cs" />
     <Compile Include="Support\SharedContext.cs" />
     <Compile Include="Support\InverseBooleanConverter.cs" />
     <Compile Include="Support\ReactiveUIExtensions.cs" />
@@ -210,9 +217,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

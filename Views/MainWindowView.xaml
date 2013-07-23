@@ -52,10 +52,15 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem Grid.Column="0">
-                <TextBlock Text=""/>
+                <TextBlock Text="{Binding StatusMessage, Mode=OneWay}"/>
             </StatusBarItem>
             <StatusBarItem Grid.Column="1">
-                <ProgressBar/>
+                <ProgressBar
+                  Visibility="{Binding IsWorking, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" 
+                  Width="80"
+                  Height="18" 
+                  IsIndeterminate="{Binding IsProgressIndeterminate, Mode=OneWay}" 
+                  Value="{Binding Progress, Mode=OneWay}"/>
             </StatusBarItem>
         </StatusBar>
         <Grid>
