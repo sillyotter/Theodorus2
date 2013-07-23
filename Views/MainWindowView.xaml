@@ -33,6 +33,9 @@
                 <MenuItem Command="ApplicationCommands.Redo"/>
                 <MenuItem Command="ApplicationCommands.SelectAll"/>
             </MenuItem>
+            <MenuItem Header="Query">
+                <MenuItem Header="Execute" Command="{Binding ExecuteCommand}"/>
+            </MenuItem>
             <MenuItem Header="_Help" HorizontalAlignment="Right" FlowDirection="RightToLeft">
                 <MenuItem Header="_About" Command="{Binding AboutCommand}" FlowDirection="RightToLeft"/>
             </MenuItem>
@@ -69,11 +72,12 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="3*"/>
             </Grid.RowDefinitions>
-            <avalonedit:TextEditor 
+            <avalonedit:TextEditor x:Name="TextEditor"
                 Grid.Row="0"
                 FontFamily="Consolas"
                 SyntaxHighlighting="C#"
-                FontSize="10pt"/>
+                
+                FontSize="10pt" Document="{Binding Document, Mode=OneWay}"/>
             <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="5"/>
             <DataGrid Grid.Row="2"></DataGrid>
             <!-- Maybe really use a listview with a template, but I dont know since we dont know the num of cols ahead of time -->

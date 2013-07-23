@@ -14,10 +14,11 @@ namespace Theodorus2.Support
             Bind<MainWindowViewModel>().To<MainWindowViewModel>().InSingletonScope();
 
             Bind<IMessageBus>().To<MessageBus>().InSingletonScope();
+            Bind<IQueryExecutionService>().To<SqliteQueryExecutionService>().InSingletonScope();
 
             Bind<IStatusListener>().To<DefaultStatusListener>();
             Bind<IStatusReporter>().To<DefaultStatusReporter>();
-
+            
             //Bind<IViewModel>().To<StatusLogViewModel>().InSingletonScope();
             //Bind<IViewModel>().To<DefaultDisplayViewModel>().InSingletonScope();
             //Bind<IViewModel>().To<DefaultRealViewModel>().InSingletonScope();

@@ -1,0 +1,155 @@
+﻿<?xml version="1.0"?>
+<SyntaxDefinition name="sql" extensions=".sql" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="String" foreground="Olive" exampleText="string text = &quot;Hello, World!&quot;"/>
+  <Color name="String2" foreground="#993" exampleText="string text = &quot;Hello, World!&quot;"/>
+  <Color name="Comment" foreground="Green" exampleText="string text = &quot;Hello, World!&quot;"/>
+  <Color name="Punctuation" foreground="Red" exampleText="string text = &quot;Hello, World!&quot;"/>
+  <RuleSet  ignoreCase="true">
+    
+    <Span color="String" multiline="true" >
+      <Begin>'</Begin>
+      <End>'</End>
+    </Span>
+
+    <Span color="String2" multiline="true"  >
+      <Begin>"</Begin>
+      <End>"</End>
+    </Span>
+
+    <Span color="Comment" begin="--" end="\n"/>
+    
+    <Span color="Comment"  multiline="true">
+      <Begin>/\*</Begin>
+      <End>\*/</End>
+    </Span>
+
+    <Keywords fontWeight="bold" foreground="Blue" >
+      <Word>ABORT</Word>
+      <Word>ACTION</Word>
+      <Word>ADD</Word>
+      <Word>AFTER</Word>
+      <Word>ALL</Word>
+      <Word>ALTER</Word>
+      <Word>ANALYZE</Word>
+      <Word>AND</Word>
+      <Word>AS</Word>
+      <Word>ASC</Word>
+      <Word>ATTACH</Word>
+      <Word>AUTOINCREMENT</Word>
+      <Word>BEFORE</Word>
+      <Word>BEGIN</Word>
+      <Word>BETWEEN</Word>
+      <Word>BY</Word>
+      <Word>CASCADE</Word>
+      <Word>CASE</Word>
+      <Word>CAST</Word>
+      <Word>CHECK</Word>
+      <Word>COLLATE</Word>
+      <Word>COLUMN</Word>
+      <Word>COMMIT</Word>
+      <Word>CONFLICT</Word>
+      <Word>CONSTRAINT</Word>
+      <Word>CREATE</Word>
+      <Word>CROSS</Word>
+      <Word>CURRENT_DATE</Word>
+      <Word>CURRENT_TIME</Word>
+      <Word>CURRENT_TIMESTAMP</Word>
+      <Word>DATABASE</Word>
+      <Word>DEFAULT</Word>
+      <Word>DEFERRABLE</Word>
+      <Word>DEFERRED</Word>
+      <Word>DELETE</Word>
+      <Word>DESC</Word>
+      <Word>DETACH</Word>
+      <Word>DISTINCT</Word>
+      <Word>DROP</Word>
+      <Word>EACH</Word>
+      <Word>ELSE</Word>
+      <Word>END</Word>
+      <Word>ESCAPE</Word>
+      <Word>EXCEPT</Word>
+      <Word>EXCLUSIVE</Word>
+      <Word>EXISTS</Word>
+      <Word>EXPLAIN</Word>
+      <Word>FAIL</Word>
+      <Word>FOR</Word>
+      <Word>FOREIGN</Word>
+      <Word>FROM</Word>
+      <Word>FULL</Word>
+      <Word>GLOB</Word>
+      <Word>GROUP</Word>
+      <Word>HAVING</Word>
+      <Word>IF</Word>
+      <Word>IGNORE</Word>
+      <Word>IMMEDIATE</Word>
+      <Word>IN</Word>
+      <Word>INDEX</Word>
+      <Word>INDEXED</Word>
+      <Word>INITIALLY</Word>
+      <Word>INNER</Word>
+      <Word>INSERT</Word>
+      <Word>INSTEAD</Word>
+      <Word>INTERSECT</Word>
+      <Word>INTO</Word>
+      <Word>IS</Word>
+      <Word>ISNULL</Word>
+      <Word>JOIN</Word>
+      <Word>KEY</Word>
+      <Word>LEFT</Word>
+      <Word>LIKE</Word>
+      <Word>LIMIT</Word>
+      <Word>MATCH</Word>
+      <Word>NATURAL</Word>
+      <Word>NO</Word>
+      <Word>NOT</Word>
+      <Word>NOTNULL</Word>
+      <Word>NULL</Word>
+      <Word>OF</Word>
+      <Word>OFFSET</Word>
+      <Word>ON</Word>
+      <Word>OR</Word>
+      <Word>ORDER</Word>
+      <Word>OUTER</Word>
+      <Word>PLAN</Word>
+      <Word>PRAGMA</Word>
+      <Word>PRIMARY</Word>
+      <Word>QUERY</Word>
+      <Word>RAISE</Word>
+      <Word>REFERENCES</Word>
+      <Word>REGEXP</Word>
+      <Word>REINDEX</Word>
+      <Word>RELEASE</Word>
+      <Word>RENAME</Word>
+      <Word>REPLACE</Word>
+      <Word>RESTRICT</Word>
+      <Word>RIGHT</Word>
+      <Word>ROLLBACK</Word>
+      <Word>ROW</Word>
+      <Word>SAVEPOINT</Word>
+      <Word>SELECT</Word>
+      <Word>SET</Word>
+      <Word>TABLE</Word>
+      <Word>TEMP</Word>
+      <Word>TEMPORARY</Word>
+      <Word>THEN</Word>
+      <Word>TO</Word>
+      <Word>TRANSACTION</Word>
+      <Word>TRIGGER</Word>
+      <Word>UNION</Word>
+      <Word>UNIQUE</Word>
+      <Word>UPDATE</Word>
+      <Word>USING</Word>
+      <Word>VACUUM</Word>
+      <Word>VALUES</Word>
+      <Word>VIEW</Word>
+      <Word>VIRTUAL</Word>
+      <Word>WHEN</Word>
+      <Word>WHERE</Word>
+    </Keywords>
+    <Rule color="Punctuation">
+      [?,.;()\[\]{}+\-/%*&lt;&gt;^+~!|&amp;]+
+    </Rule>
+
+  </RuleSet>
+
+</SyntaxDefinition>

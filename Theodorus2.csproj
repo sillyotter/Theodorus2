@@ -125,6 +125,7 @@
     <Compile Include="Support\ExecutionStatus.cs" />
     <Compile Include="Interfaces\IStatusListener.cs" />
     <Compile Include="Interfaces\IStatusReporter.cs" />
+    <Compile Include="Support\SqliteQueryExecutionService.cs" />
     <Compile Include="Support\StatusReport.cs" />
     <Compile Include="Support\SharedContext.cs" />
     <Compile Include="Support\InverseBooleanConverter.cs" />
@@ -142,6 +143,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\IQueryExecutionService.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\MainWindowView.xaml.cs">
       <DependentUpon>MainWindowView.xaml</DependentUpon>
@@ -162,6 +164,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="README.md" />
     <Resource Include="Assets\Icons\MainWindow.ico" />
     <Resource Include="Assets\Images\CopyHS.png" />
     <Resource Include="Assets\Images\CutHS.png" />
@@ -187,6 +190,8 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Assets\SQL.xhsd" />
+    <None Include="LICENSE" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
