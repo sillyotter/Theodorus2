@@ -2,9 +2,10 @@
 <SyntaxDefinition name="sql" extensions=".sql" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
   <Color name="String" foreground="Olive" exampleText="string text = &quot;Hello, World!&quot;"/>
   <Color name="String2" foreground="#993" exampleText="string text = &quot;Hello, World!&quot;"/>
-  <Color name="Comment" foreground="Green" exampleText="string text = &quot;Hello, World!&quot;"/>
+  <Color name="Comment" foreground="#777" exampleText="string text = &quot;Hello, World!&quot;"/>
   <Color name="Punctuation" foreground="Red" exampleText="string text = &quot;Hello, World!&quot;"/>
-  <RuleSet  ignoreCase="true">
+  
+  <RuleSet ignoreCase="true">
     
     <Span color="String" multiline="true" >
       <Begin>'</Begin>
@@ -23,7 +24,7 @@
       <End>\*/</End>
     </Span>
 
-    <Keywords fontWeight="bold" foreground="Blue" >
+    <Keywords foreground="Blue" >
       <Word>ABORT</Word>
       <Word>ACTION</Word>
       <Word>ADD</Word>
@@ -146,6 +147,52 @@
       <Word>WHEN</Word>
       <Word>WHERE</Word>
     </Keywords>
+
+    <Keywords foreground="Green">
+      <Word>avg</Word>
+      <Word>count</Word>
+      <Word>group_concat</Word>
+      <Word>max</Word>
+      <Word>min</Word>
+      <Word>sum</Word>
+      <Word>total</Word>
+      <Word>abs</Word>
+      <Word>changes</Word>
+      <Word>coalesce</Word>
+      <Word>glob</Word>
+      <Word>ifnull</Word>
+      <Word>hex</Word>
+      <Word>last_insert_rowid</Word>
+      <Word>length</Word>
+      <Word>like</Word>
+      <Word>load_extension</Word>
+      <Word>lower</Word>
+      <Word>ltrim</Word>
+      <Word>nullif</Word>
+      <Word>quote</Word>
+      <Word>random</Word>
+      <Word>randomblob</Word>
+      <Word>replace</Word>
+      <Word>round</Word>
+      <Word>rtrim</Word>
+      <Word>soundex</Word>
+      <Word>sqlite_version</Word>
+      <Word>substr</Word>
+      <Word>total_changes</Word>
+      <Word>trim</Word>
+      <Word>typeof</Word>
+      <Word>upper</Word>
+      <Word>zeroblob</Word>
+      <Word>date</Word>
+      <Word>time</Word>
+      <Word>datetime</Word>
+      <Word>julianday</Word>
+      <Word>strftime</Word>
+      <Word>binary</Word>
+      <Word>nocase</Word>
+      <Word>rtrim</Word>
+    </Keywords>
+    
     <Rule color="Punctuation">
       [?,.;()\[\]{}+\-/%*&lt;&gt;^+~!|&amp;]+
     </Rule>
