@@ -2,6 +2,7 @@
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using Microsoft.Win32;
 using Ninject;
 using Theodorus2.Interfaces;
 using Theodorus2.Support;
@@ -9,7 +10,7 @@ using Theodorus2.ViewModels;
 
 namespace Theodorus2.Views
 {
-    public partial class MainWindowView : IAboutDialogService, IConnectionInformationService, IDisposable
+    public partial class MainWindowView : IAboutDialogService, IConnectionInformationService, IFileSelectorService, IOptionsDialogService, IDisposable
     {
         private readonly MainWindowViewModel _vm;
 
@@ -29,9 +30,29 @@ namespace Theodorus2.Views
             }
         }
 
+        public string PromptForFile(string defaultExtension, string filters)
+        {
+            var ofd = new OpenFileDialog
+            {
+                AddExtension = false,
+                CheckFileExists = false,
+                CheckPathExists = true,
+                DefaultExt = defaultExtension,
+                Filter = filters,
+                FilterIndex = 0,
+                RestoreDirectory = true,
+                Multiselect = false,
+                DereferenceLinks = true,
+                ValidateNames = true,
+            };
+
+            return ofd.ShowDialog() == true ? ofd.FileName : null;
+        }
+
         public void ShowAboutDialog()
         {
             var about = SharedContext.Instance.Kernel.Get<About>();
+            about.Owner = this;
             about.ShowDialog();
         }
 
@@ -39,9 +60,17 @@ namespace Theodorus2.Views
         {
             using (var con = SharedContext.Instance.Kernel.Get<ConnectionDialog>())
             {
+                con.Owner = this;
                 var res = con.ShowDialog();
                 return res == true ? con.ConnectionString : null;
             }
+        }
+
+        public void ShowOptionsDialog()
+        {
+            var options = SharedContext.Instance.Kernel.Get<OptionsDialog>();
+            options.Owner = this;
+            options.ShowDialog();
         }
 
         public void Dispose()

@@ -15,32 +15,174 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Shift+Control" Key="X" Command="{Binding ExecuteCommand}"/>
+    </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
+            <Menu.Resources>
+                <Style TargetType="Image">
+                    <Setter Property="Stretch" Value="Uniform"/>
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="Height" Value="16"/>
+                    <Setter Property="Width" Value="16"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type MenuItem}}, Path=IsEnabled}" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Menu.Resources>
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel HorizontalAlignment="Stretch"/>
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
             <MenuItem Header="_File">
-                <MenuItem Header="_Open" Command="{Binding OpenCommand}"/>
+                <MenuItem Header="_Open Database" Command="{Binding OpenDatabaseCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/Images/OpenHS.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Open Query" Command="{Binding OpenQueryCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/Images/OpenHS.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Save Query" Command="{Binding SaveQueryCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/Images/SaveHS.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Save Results" Command="{Binding SaveResultsCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/Images/SaveAsWebPageHS.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
                 <MenuItem Header="E_xit" Command="{Binding ExitCommand}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Command="ApplicationCommands.Copy"/>
-                <MenuItem Command="ApplicationCommands.Cut"/>
-                <MenuItem Command="ApplicationCommands.Paste"/>
                 <MenuItem Command="ApplicationCommands.Undo"/>
                 <MenuItem Command="ApplicationCommands.Redo"/>
+                <Separator/>
+                <MenuItem Command="ApplicationCommands.Cut">
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/Images/CutHS.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="ApplicationCommands.Copy">
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/Images/CopyHS.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="ApplicationCommands.Paste">
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/Images/PasteHS.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Command="ApplicationCommands.SelectAll"/>
             </MenuItem>
-            <MenuItem Header="Query">
-                <MenuItem Header="Execute" Command="{Binding ExecuteCommand}"/>
+            <MenuItem Header="Tools">
+                <MenuItem Header="Options..." Command="{Binding OptionsCommand}" >
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/Images/OptionsHS.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="ApplicationCommands.Find" IsEnabled="{Binding Path=IsConnected}"/>
+                <MenuItem Header="Goto..." Command="{Binding GotoCommand}" IsEnabled="{Binding Path=IsConnected}"/>
+                <MenuItem Header="Execute" InputGestureText="Shift+Ctrl+X"  Command="{Binding ExecuteCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/Images/Play.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Help" HorizontalAlignment="Right" FlowDirection="RightToLeft">
-                <MenuItem Header="_About" Command="{Binding AboutCommand}" FlowDirection="RightToLeft"/>
+                <MenuItem Header="_About" Command="{Binding AboutCommand}" FlowDirection="RightToLeft">
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/Images/Help.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBarTray.Resources>
+                <Style TargetType="Image">
+                    <Setter Property="Stretch" Value="Uniform"/>
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="Height" Value="16"/>
+                    <Setter Property="Width" Value="16"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button},AncestorLevel=1}, Path=IsEnabled}" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ToolBarTray.Resources>
+            <ToolBar>
+                <Button Command="{Binding OpenDatabaseCommand}">
+                    <Button.ToolTip>
+                        <ToolTip>
+                            <TextBlock>Open document.</TextBlock>
+                        </ToolTip>
+                    </Button.ToolTip>
+                    <Image Source="/Assets/Images/OpenHS.png"/>
+                </Button>
+                <Separator/>
+                <Button Command="ApplicationCommands.Cut">
+                    <Button.ToolTip>
+                        <ToolTip>
+                            <TextBlock>Cut data to the clipboard.</TextBlock>
+                        </ToolTip>
+                    </Button.ToolTip>
+                    <Image Source="/Assets/Images/CutHS.png"/>
+                </Button>
+                <Button Command="ApplicationCommands.Copy">
+                    <Button.ToolTip>
+                        <ToolTip>
+                            <TextBlock>Copy data to the clipboard.</TextBlock>
+                        </ToolTip>
+                    </Button.ToolTip>
+                    <Image Source="/Assets/Images/CopyHS.png"/>
+                </Button>
+                <Button Command="ApplicationCommands.Paste">
+                    <Button.ToolTip>
+                        <ToolTip>
+                            <TextBlock>Paste data from the clipboard.</TextBlock>
+                        </ToolTip>
+                    </Button.ToolTip>
+                    <Image Source="/Assets/Images/PasteHS.png"/>
+                </Button>
+                <Separator/>
+                <Button Command="{Binding OptionsCommand}">
+                    <Button.ToolTip>
+                        <ToolTip>
+                            <TextBlock>Change options.</TextBlock>
+                        </ToolTip>
+                    </Button.ToolTip>
+                    <Image Source="/Assets/Images/OptionsHS.png"/>
+                </Button>
+                <Separator/>
+                <Button Command="{Binding AboutCommand}">
+                    <Button.ToolTip>
+                        <ToolTip>
+                            <TextBlock>Show help.</TextBlock>
+                        </ToolTip>
+                    </Button.ToolTip>
+                    <Image Source="/Assets/Images/Help.png"/>
+                </Button>
+            </ToolBar>
+            <ToolBar>
+                <Button Command="{Binding ExecuteCommand}">
+                    <Button.ToolTip>
+                        <ToolTip>
+                            <TextBlock>Execute Query.</TextBlock>
+                        </ToolTip>
+                    </Button.ToolTip>
+                    <Image Source="/Assets/Images/Play.png"/>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
         <StatusBar DockPanel.Dock="Bottom" >
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -77,10 +219,10 @@
                 Grid.Row="0"
                 FontFamily="Consolas"
                 SyntaxHighlighting="C#"
-                
+                IsEnabled="{Binding IsConnected}"
                 FontSize="10pt" Document="{Binding Document, Mode=OneWay}"/>
             <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="5"/>
-            <DataGrid Grid.Row="2"></DataGrid>
+            <DataGrid Grid.Row="2" IsEnabled="{Binding IsConnected}"></DataGrid>
             <!-- Maybe really use a listview with a template, but I dont know since we dont know the num of cols ahead of time -->
         </Grid>
     </DockPanel>

@@ -10,7 +10,6 @@ using Ninject;
 using ReactiveUI;
 using Theodorus2.Interfaces;
 using Theodorus2.Support;
-using Theodorus2.Views;
 
 namespace Theodorus2.ViewModels
 {

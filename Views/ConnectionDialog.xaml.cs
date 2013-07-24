@@ -5,12 +5,7 @@ using System;
 
 namespace Theodorus2.Views
 {
-    interface IFileSelectorService
-    {
-        string PromptForFile(string defaultExtension, string filters);
-    }
-
-	public partial class ConnectionDialog : IFileSelectorService, IDisposable
+    public partial class ConnectionDialog : IDisposable
 	{
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
         private readonly IConnectionDialogViewModel _vm;
@@ -29,26 +24,7 @@ namespace Theodorus2.Views
 		        }));
             _compositeDisposable.Add(_vm);
 		}
-
-	    public string PromptForFile(string defaultExtension, string filters)
-	    {
-            var ofd = new OpenFileDialog
-            {
-                AddExtension = false,
-                CheckFileExists = false,
-                CheckPathExists = true,
-                DefaultExt = defaultExtension,
-                Filter = filters,
-                FilterIndex = 0,
-                RestoreDirectory = true,
-                Multiselect = false,
-                DereferenceLinks = true,
-                ValidateNames = true
-            };
-
-	        return ofd.ShowDialog() == true ? ofd.FileName : null;
-	    }
-
+        
         public string ConnectionString
         {
             get

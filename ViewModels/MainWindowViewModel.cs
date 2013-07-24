@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Mime;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -13,6 +14,7 @@ namespace Theodorus2.ViewModels
 {
     public class MainWindowViewModel : ReactiveObject, IDisposable
     {
+        private readonly IQueryExecutionService _queryExecutor;
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
         private string _statusMessage = String.Empty;
         private bool _isWorking;
@@ -22,6 +24,8 @@ namespace Theodorus2.ViewModels
 
         public MainWindowViewModel(IStatusListener listener, IQueryExecutionService queryExecutor)
         {
+            _queryExecutor = queryExecutor;
+
             var exc = new ReactiveCommand(this.WhenAny(x => x.IsWorking, x => !x.Value));
             exc.Subscribe(x => Application.Current.Shutdown());
             ExitCommand = exc;
@@ -58,7 +62,8 @@ namespace Theodorus2.ViewModels
             var textExists = Observable.FromEventPattern<EventHandler, EventArgs>(
                 h => _document.TextChanged += h,
                 h => _document.TextChanged -= h)
-                .Select(_ => _document.TextLength > 0);
+                .Select(_ => _document.TextLength > 0)
+                .StartWith(false);
 
             var execute = new ReactiveCommand(textExists);
             execute.RegisterAsyncTask(async _ => await queryExecutor.Execute(_document.Text));
@@ -67,22 +72,33 @@ namespace Theodorus2.ViewModels
 
             var open = new ReactiveCommand();
             _compositeDisposable.Add(
-            open.Subscribe(x =>
-            {
-                queryExecutor.ConnectionString = ConnectionInformationService.GetConnectionString();
-            }));
-            OpenCommand = open;
+                open.Subscribe(x =>
+                {
+                    _queryExecutor.ConnectionString = ConnectionInformationService.GetConnectionString();
+                    this.RaisePropertyChanged(r => r.IsConnected);
+                }));
+            OpenDatabaseCommand = open;
             _compositeDisposable.Add(open);
 
-            StatusMessage = "Ready";
+            var options = new ReactiveCommand();
+            _compositeDisposable.Add(
+                options.Subscribe(x => OptionsDialogService.ShowOptionsDialog()));
+            _compositeDisposable.Add(options);
+            OptionsCommand = options;
 
+            StatusMessage = "Ready";
         }
 
         public ICommand ExecuteCommand { get; private set; }
         public ICommand ExitCommand { get; private set; }
         public ICommand AboutCommand { get; private set; }
-        public ICommand OpenCommand { get; private set; }
-
+        public ICommand OpenDatabaseCommand { get; private set; }
+        public ICommand OpenQueryCommand { get; private set; }
+        public ICommand SaveQueryCommand { get; private set; }
+        public ICommand SaveResultsCommand { get; private set; }
+        public ICommand OptionsCommand { get; private set; }
+        public ICommand GotoCommand { get; private set; }
+        
         public IAboutDialogService AboutDialogService
         {
             get
@@ -99,6 +115,18 @@ namespace Theodorus2.ViewModels
             }
         }
 
+        public IOptionsDialogService OptionsDialogService
+        {
+            get
+            {
+                return SharedContext.Instance.Kernel.Get<IOptionsDialogService>();
+            }
+        }
+
+        public bool IsConnected
+        {
+            get { return !String.IsNullOrWhiteSpace(_queryExecutor.ConnectionString); }            
+        }
 
         public string StatusMessage
         {
@@ -129,6 +157,7 @@ namespace Theodorus2.ViewModels
             get { return _document; }
         }
 
+    
         public void Dispose()
         {
             _compositeDisposable.Dispose();
