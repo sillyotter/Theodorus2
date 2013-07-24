@@ -17,6 +17,7 @@ namespace Theodorus2.Support
             Bind<IFileSelectionService>().ToMethod(c => c.Kernel.Get<MainWindowView>());
             Bind<IOptionsDialogService>().ToMethod(c => c.Kernel.Get<MainWindowView>());
             Bind<IUserPromptingService>().ToMethod(c => c.Kernel.Get<MainWindowView>());
+            Bind<IResultsPresenter>().ToMethod(c => c.Kernel.Get<MainWindowView>());
 
             Bind<MainWindowViewModel>().ToSelf();
 
@@ -29,8 +30,10 @@ namespace Theodorus2.Support
 
             Bind<About>().ToSelf();
             Bind<ConnectionDialog>().ToSelf();
+            Bind<OptionsDialog>().ToSelf();
             Bind<OptionsDialogViewModel>().ToSelf();
-            Bind<IConnectionDialogViewModel>().To<ConnectionDialogViewModel>();           
+            Bind<IConnectionDialogViewModel>().To<ConnectionDialogViewModel>();
+            Bind<IResultRenderer>().To<DefaultHtmlRenderer>();
         }
     }
 }

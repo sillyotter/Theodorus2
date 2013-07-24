@@ -1,4 +1,4 @@
-﻿namespace Theodorus2.Views
+﻿namespace Theodorus2.Interfaces
 {
     public interface IUserPromptingService
     {

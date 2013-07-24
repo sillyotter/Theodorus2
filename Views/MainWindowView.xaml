@@ -223,8 +223,8 @@
                 support:AvalonEditorHelper.SelectedText="{Binding SelectedText, Mode=OneWayToSource}"
                 FontSize="10pt" Document="{Binding Document, Mode=OneWay}"/>
             <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="5"/>
-            <DataGrid Grid.Row="2" IsEnabled="{Binding HasResults}"></DataGrid>
-            <!-- Maybe really use a listview with a template, but I dont know since we dont know the num of cols ahead of time -->
+            <WebBrowser x:Name="Browser" Focusable="True" Grid.Row="2" IsEnabled="{Binding HasResults}"></WebBrowser>
+            
         </Grid>
     </DockPanel>
 </Window>

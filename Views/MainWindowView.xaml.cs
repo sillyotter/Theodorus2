@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
@@ -12,13 +12,22 @@ using Theodorus2.ViewModels;
 
 namespace Theodorus2.Views
 {
-    public partial class MainWindowView : IAboutDialogService, IConnectionInformationService, IFileSelectionService, IOptionsDialogService, IUserPromptingService, IDisposable
+    public interface IResultsPresenter
+    {
+        void PresentResults(IEnumerable<IQueryResult> results);
+    }
+
+    public partial class MainWindowView : IAboutDialogService, IConnectionInformationService, 
+        IFileSelectionService, IOptionsDialogService, IUserPromptingService, IResultsPresenter,
+        IDisposable
     {
         private readonly MainWindowViewModel _vm;
+        private readonly IResultRenderer _renderer;
 
-        public MainWindowView(MainWindowViewModel vm)
+        public MainWindowView(MainWindowViewModel vm, IResultRenderer renderer)
         {
             _vm = vm;
+            _renderer = renderer;
             DataContext = vm;
             InitializeComponent();
 
@@ -109,6 +118,11 @@ namespace Theodorus2.Views
         {
             MessageBox.Show(this, message, "Alert", MessageBoxButton.OK, MessageBoxImage.Exclamation,
                 MessageBoxResult.OK);
+        }
+
+        public void PresentResults(IEnumerable<IQueryResult> results)
+        {
+            Browser.NavigateToString(_renderer.RenderResults(results));
         }
     }
 }

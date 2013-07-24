@@ -11,7 +11,7 @@ using ReactiveUI;
 
 namespace Theodorus2.Support
 {
-    abstract class ValidatableReactiveObject<TSource> : ReactiveObject, INotifyDataErrorInfo, IDisposable 
+    public abstract class ValidatableReactiveObject<TSource> : ReactiveObject, INotifyDataErrorInfo, IDisposable 
     {
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
 
