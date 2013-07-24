@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Net.Mime;
-using System.Reactive;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using ICSharpCode.AvalonEdit.Document;
@@ -20,13 +21,17 @@ namespace Theodorus2.ViewModels
     {
         private readonly IQueryExecutionService _queryExecutor;
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
+        private readonly TextDocument _document = new TextDocument();
+        private readonly Subject<bool> _dirtyState = new Subject<bool>();
+        private readonly ObservableAsPropertyHelper<bool> _dirtyPropertyHelper;
+        private readonly ObservableAsPropertyHelper<bool> _hasResultsPropertyHelper; 
+
         private string _statusMessage = String.Empty;
         private bool _isWorking;
         private int _progress = -1;
         private bool _isProgressIndeterminate;
-        private readonly TextDocument _document = new TextDocument();
-        private readonly Subject<bool> _dirtyState = new Subject<bool>();
-        private readonly ObservableAsPropertyHelper<bool> _dirtyPropertyHelper; 
+        private IEnumerable<IQueryResult> _queryResults;
+        private string _selectedText;
 
         public MainWindowViewModel(IStatusListener listener, IQueryExecutionService queryExecutor)
         {
@@ -81,9 +86,18 @@ namespace Theodorus2.ViewModels
                 .StartWith(false);
 
             var execute = new ReactiveCommand(textExists);
-            execute.RegisterAsyncTask(async _ => await queryExecutor.Execute(_document.Text));
+            execute.RegisterAsyncTask(async _ =>
+            {
+                var toExecute = !String.IsNullOrEmpty(SelectedText) ? SelectedText : Document.Text;
+                QueryResults = await queryExecutor.Execute(toExecute);
+            });
             ExecuteCommand = execute;
             _compositeDisposable.Add(execute);
+
+            _hasResultsPropertyHelper = this.WhenAny(x => x.QueryResults, x => x.Value != null && x.Value.Any())
+                .DistinctUntilChanged()
+                .ToProperty(this, x => x.HasResults);
+            _compositeDisposable.Add(_hasResultsPropertyHelper);
 
             var open = new ReactiveCommand();
             _compositeDisposable.Add(
@@ -101,60 +115,57 @@ namespace Theodorus2.ViewModels
             _compositeDisposable.Add(options);
             OptionsCommand = options;
 
-            // TODO: Make io below async
-
-            var openQuery = new ReactiveCommand();
-            _compositeDisposable.Add(
-                openQuery.Subscribe(x =>
+            var openQuery = new ReactiveCommand(this.WhenAny(x => x.IsConnected, x => x.Value));
+            openQuery.RegisterAsyncTask(async x =>
+            {
+                if (IsDirty)
                 {
-                    if (IsDirty)
+                    if (!UserPromptingService.PromptUserYesNo("Open",
+                        "Current document has not been saved, do you want to continue and loose those changes?"))
                     {
-                        if (!UserPromptingService.PromptUserYesNo("Open",
-                            "Current document has not been saved, do you want to continue and loose those changes?"))
-                        {
-                            return;
-                        }
-                    }
-                    var fileName = FileSelectionService.PromptToOpenFile("*.sql",
-                        "SQL Files (*.sql)|*.sql|Text Files (*.txt)|*.txt|All Files (*.*)|*.*");
-
-                    if (fileName == null) return;
-
-                    string data = null;
-                    try
-                    {
-                        data = TextFileIOService.ReadFile(fileName);
-                    }
-                    catch (FileNotFoundException)
-                    {
-                        UserPromptingService.DisplayAlert(String.Format("The file {0} was not found.", fileName));
                         return;
                     }
-                    catch (IOException)
-                    {
-                        UserPromptingService.DisplayAlert(String.Format("The file {0} was not read.", fileName));
-                    }
+                }
 
-                    Document.Text = data;
-                    _dirtyState.OnNext(false);
+                var fileName = FileSelectionService.PromptToOpenFile("*.sql",
+                    "SQL Files (*.sql)|*.sql|Text Files (*.txt)|*.txt|All Files (*.*)|*.*");
 
-                }));
+                if (fileName == null) return;
+
+                string data = null;
+                try
+                {
+                    data = await Task.Run(() => TextFileIOService.ReadFile(fileName));
+                }
+                catch (FileNotFoundException)
+                {
+                    UserPromptingService.DisplayAlert(String.Format("The file {0} was not found.", fileName));
+                    return;
+                }
+                catch (IOException)
+                {
+                    UserPromptingService.DisplayAlert(String.Format("The file {0} was not read.", fileName));
+                }
+
+                Document.Text = data;
+                _dirtyState.OnNext(false);
+
+            });
             OpenQueryCommand = openQuery;
             _compositeDisposable.Add(openQuery);
 
             var saveQuery = new ReactiveCommand(this.WhenAny(x => x.IsDirty, x => x.Value));
-            _compositeDisposable.Add(
-                saveQuery.Subscribe(x =>
+            saveQuery.RegisterAsyncTask(async x =>
+            {
+                var fileName = FileSelectionService.PromptToSaveFile("*.sql",
+                    "SQL Files (*.sql)|*.sql|Text Files (*.txt)|*.txt|All Files (*.*)|*.*");
+                if (fileName != null)
                 {
-                    var fileName = FileSelectionService.PromptToSaveFile("*.sql",
-                        "SQL Files (*.sql)|*.sql|Text Files (*.txt)|*.txt|All Files (*.*)|*.*");
-                    if (fileName != null)
-                    {
-                        TextFileIOService.WriteFile(fileName, Document.Text);
-                    }
-                    _dirtyState.OnNext(false);
+                    await Task.Run(() => TextFileIOService.WriteFile(fileName, Document.Text));
+                }
+                _dirtyState.OnNext(false);
 
-                }));
+            });
             _compositeDisposable.Add(saveQuery);
             SaveQueryCommand = saveQuery;
 
@@ -226,6 +237,23 @@ namespace Theodorus2.ViewModels
             {
                 return SharedContext.Instance.Kernel.Get<IUserPromptingService>();
             }
+        }
+
+        public IEnumerable<IQueryResult> QueryResults
+        {
+            get { return _queryResults; }
+            set { this.RaiseAndSetIfChanged(ref _queryResults, value); }
+        }
+
+        public string SelectedText
+        {
+            get { return _selectedText; }
+            set { this.RaiseAndSetIfChanged(ref _selectedText, value); }
+        }
+
+        public bool HasResults
+        {
+            get { return _hasResultsPropertyHelper.Value; }
         }
 
         public bool IsDirty

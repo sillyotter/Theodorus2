@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Theodorus2.Interfaces
 {
     public interface IQueryExecutionService
     {
-        Task Execute(string query);
+        Task<IEnumerable<IQueryResult>> Execute(string query);
         string ConnectionString { get; set; }
     }
 }

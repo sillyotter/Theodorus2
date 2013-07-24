@@ -129,7 +129,9 @@
     <Compile Include="Support\ExecutionStatus.cs" />
     <Compile Include="Interfaces\IStatusListener.cs" />
     <Compile Include="Interfaces\IStatusReporter.cs" />
+    <Compile Include="Interfaces\IQueryResult.cs" />
     <Compile Include="Support\SqliteQueryExecutionService.cs" />
+    <Compile Include="Support\SqliteQueryResult.cs" />
     <Compile Include="Support\StatusReport.cs" />
     <Compile Include="Support\SharedContext.cs" />
     <Compile Include="Support\InverseBooleanConverter.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="Support\IoCConfiguration.cs" />
     <Compile Include="ViewModels\OptionsDialogViewModel.cs" />
     <Compile Include="Interfaces\IFileSelectionService.cs" />
+    <Compile Include="Support\AvalonEditorHelper.cs" />
     <Compile Include="Views\IUserPromptingService.cs" />
     <Compile Include="Views\OptionsDialog.xaml.cs">
       <DependentUpon>OptionsDialog.xaml</DependentUpon>
