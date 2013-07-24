@@ -121,8 +121,11 @@
     </ApplicationDefinition>
     <Compile Include="Interfaces\IAboutDialogService.cs" />
     <Compile Include="Interfaces\IConnectionInformationService.cs" />
+    <Compile Include="Interfaces\IOptionsDialogService.cs" />
+    <Compile Include="Interfaces\ITextFileIOService.cs" />
     <Compile Include="Support\DefaultStatusListener.cs" />
     <Compile Include="Support\DefaultStatusReporter.cs" />
+    <Compile Include="Support\DefaultTextFileIOService.cs" />
     <Compile Include="Support\ExecutionStatus.cs" />
     <Compile Include="Interfaces\IStatusListener.cs" />
     <Compile Include="Interfaces\IStatusReporter.cs" />
@@ -133,7 +136,8 @@
     <Compile Include="Support\ReactiveUIExtensions.cs" />
     <Compile Include="Support\IoCConfiguration.cs" />
     <Compile Include="ViewModels\OptionsDialogViewModel.cs" />
-    <Compile Include="Interfaces\IFileSelectorService.cs" />
+    <Compile Include="Interfaces\IFileSelectionService.cs" />
+    <Compile Include="Views\IUserPromptingService.cs" />
     <Compile Include="Views\OptionsDialog.xaml.cs">
       <DependentUpon>OptionsDialog.xaml</DependentUpon>
     </Compile>

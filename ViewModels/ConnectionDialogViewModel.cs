@@ -72,7 +72,7 @@ namespace Theodorus2.ViewModels
             _compositeDisposable.Add(
                 browseCommand.Subscribe(x =>
                 {
-                    DataSource = FileSelectorService.PromptForFile(".sqlite",
+                    DataSource = FileSelectionService.PromptToOpenFile(".sqlite",
                         "Database Files (*.sqlite)|*.sqlite|Database Files (*.db)|*.db|All Files (*.*)|*.*");
                 }));
             BrowseCommand = browseCommand;
@@ -100,11 +100,11 @@ namespace Theodorus2.ViewModels
             get { return _result; }
         }
 
-        private IFileSelectorService FileSelectorService
+        private IFileSelectionService FileSelectionService
         {
             get
             {
-                return SharedContext.Instance.Kernel.Get<IFileSelectorService>();
+                return SharedContext.Instance.Kernel.Get<IFileSelectionService>();
             }
         }
 

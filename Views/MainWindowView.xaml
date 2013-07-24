@@ -90,7 +90,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Command="ApplicationCommands.Find" IsEnabled="{Binding Path=IsConnected}"/>
-                <MenuItem Header="Goto..." Command="{Binding GotoCommand}" IsEnabled="{Binding Path=IsConnected}"/>
                 <MenuItem Header="Execute" InputGestureText="Shift+Ctrl+X"  Command="{Binding ExecuteCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Assets/Images/Play.png"/>

@@ -4,10 +4,4 @@
     {
         void ShowAboutDialog();
     }
-
-    public interface IOptionsDialogService
-    {
-        void ShowOptionsDialog();
-    }
-
 }

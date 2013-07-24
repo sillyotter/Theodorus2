@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
@@ -10,7 +11,7 @@ using Theodorus2.ViewModels;
 
 namespace Theodorus2.Views
 {
-    public partial class MainWindowView : IAboutDialogService, IConnectionInformationService, IFileSelectorService, IOptionsDialogService, IDisposable
+    public partial class MainWindowView : IAboutDialogService, IConnectionInformationService, IFileSelectionService, IOptionsDialogService, IUserPromptingService, IDisposable
     {
         private readonly MainWindowViewModel _vm;
 
@@ -30,7 +31,7 @@ namespace Theodorus2.Views
             }
         }
 
-        public string PromptForFile(string defaultExtension, string filters)
+        public string PromptToOpenFile(string defaultExtension, string filters)
         {
             var ofd = new OpenFileDialog
             {
@@ -42,6 +43,25 @@ namespace Theodorus2.Views
                 FilterIndex = 0,
                 RestoreDirectory = true,
                 Multiselect = false,
+                DereferenceLinks = true,
+                ValidateNames = true,
+            };
+
+            return ofd.ShowDialog() == true ? ofd.FileName : null;
+        }
+
+        public string PromptToSaveFile(string defaultExtension, string filters)
+        {
+            var ofd = new SaveFileDialog()
+            {
+                AddExtension = true,
+                CheckFileExists = false,
+                CheckPathExists = true,
+                OverwritePrompt = true,
+                DefaultExt = defaultExtension,
+                Filter = filters,
+                FilterIndex = 0,
+                RestoreDirectory = true,
                 DereferenceLinks = true,
                 ValidateNames = true,
             };
@@ -76,6 +96,18 @@ namespace Theodorus2.Views
         public void Dispose()
         {
             _vm.Dispose();
+        }
+
+        public bool PromptUserYesNo(string title, string question)
+        {
+            return MessageBox.Show(this, question, title, MessageBoxButton.YesNo, MessageBoxImage.Question,
+                MessageBoxResult.No) == MessageBoxResult.Yes;
+        }
+
+        public void DisplayAlert(string message)
+        {
+            MessageBox.Show(this, message, "Alert", MessageBoxButton.OK, MessageBoxImage.Exclamation,
+                MessageBoxResult.OK);
         }
     }
 }

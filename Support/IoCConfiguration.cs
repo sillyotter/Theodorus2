@@ -14,8 +14,9 @@ namespace Theodorus2.Support
             Bind<MainWindowView>().To<MainWindowView>().InSingletonScope();
             Bind<IAboutDialogService>().ToMethod(c => c.Kernel.Get<MainWindowView>());
             Bind<IConnectionInformationService>().ToMethod(c => c.Kernel.Get<MainWindowView>());
-            Bind<IFileSelectorService>().ToMethod(c => c.Kernel.Get<MainWindowView>());
+            Bind<IFileSelectionService>().ToMethod(c => c.Kernel.Get<MainWindowView>());
             Bind<IOptionsDialogService>().ToMethod(c => c.Kernel.Get<MainWindowView>());
+            Bind<IUserPromptingService>().ToMethod(c => c.Kernel.Get<MainWindowView>());
 
             Bind<MainWindowViewModel>().ToSelf();
 
@@ -24,6 +25,7 @@ namespace Theodorus2.Support
             Bind<IQueryExecutionService>().To<SqliteQueryExecutionService>();
             Bind<IStatusListener>().To<DefaultStatusListener>();
             Bind<IStatusReporter>().To<DefaultStatusReporter>();
+            Bind<ITextFileIOService>().To<DefaultTextFileIOService>();
 
             Bind<About>().ToSelf();
             Bind<ConnectionDialog>().ToSelf();

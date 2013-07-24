@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Net.Mime;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Input;
 using ICSharpCode.AvalonEdit.Document;
@@ -9,6 +12,7 @@ using Ninject;
 using ReactiveUI;
 using Theodorus2.Interfaces;
 using Theodorus2.Support;
+using Theodorus2.Views;
 
 namespace Theodorus2.ViewModels
 {
@@ -21,6 +25,8 @@ namespace Theodorus2.ViewModels
         private int _progress = -1;
         private bool _isProgressIndeterminate;
         private readonly TextDocument _document = new TextDocument();
+        private readonly Subject<bool> _dirtyState = new Subject<bool>();
+        private readonly ObservableAsPropertyHelper<bool> _dirtyPropertyHelper; 
 
         public MainWindowViewModel(IStatusListener listener, IQueryExecutionService queryExecutor)
         {
@@ -59,10 +65,19 @@ namespace Theodorus2.ViewModels
 
                 }));
 
-            var textExists = Observable.FromEventPattern<EventHandler, EventArgs>(
+            var textChanged = Observable.FromEventPattern<EventHandler, EventArgs>(
                 h => _document.TextChanged += h,
-                h => _document.TextChanged -= h)
+                h => _document.TextChanged -= h);
+
+            _compositeDisposable.Add(
+                textChanged.Subscribe(x => _dirtyState.OnNext(true)));
+
+            _dirtyPropertyHelper = _dirtyState.DistinctUntilChanged().ToProperty(this, x => x.IsDirty);
+            _compositeDisposable.Add(_dirtyPropertyHelper);
+
+            var textExists = textChanged
                 .Select(_ => _document.TextLength > 0)
+                .DistinctUntilChanged()
                 .StartWith(false);
 
             var execute = new ReactiveCommand(textExists);
@@ -86,6 +101,73 @@ namespace Theodorus2.ViewModels
             _compositeDisposable.Add(options);
             OptionsCommand = options;
 
+            // TODO: Make io below async
+
+            var openQuery = new ReactiveCommand();
+            _compositeDisposable.Add(
+                openQuery.Subscribe(x =>
+                {
+                    if (IsDirty)
+                    {
+                        if (!UserPromptingService.PromptUserYesNo("Open",
+                            "Current document has not been saved, do you want to continue and loose those changes?"))
+                        {
+                            return;
+                        }
+                    }
+                    var fileName = FileSelectionService.PromptToOpenFile("*.sql",
+                        "SQL Files (*.sql)|*.sql|Text Files (*.txt)|*.txt|All Files (*.*)|*.*");
+
+                    if (fileName == null) return;
+
+                    string data = null;
+                    try
+                    {
+                        data = TextFileIOService.ReadFile(fileName);
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        UserPromptingService.DisplayAlert(String.Format("The file {0} was not found.", fileName));
+                        return;
+                    }
+                    catch (IOException)
+                    {
+                        UserPromptingService.DisplayAlert(String.Format("The file {0} was not read.", fileName));
+                    }
+
+                    Document.Text = data;
+                    _dirtyState.OnNext(false);
+
+                }));
+            OpenQueryCommand = openQuery;
+            _compositeDisposable.Add(openQuery);
+
+            var saveQuery = new ReactiveCommand(this.WhenAny(x => x.IsDirty, x => x.Value));
+            _compositeDisposable.Add(
+                saveQuery.Subscribe(x =>
+                {
+                    var fileName = FileSelectionService.PromptToSaveFile("*.sql",
+                        "SQL Files (*.sql)|*.sql|Text Files (*.txt)|*.txt|All Files (*.*)|*.*");
+                    if (fileName != null)
+                    {
+                        TextFileIOService.WriteFile(fileName, Document.Text);
+                    }
+                    _dirtyState.OnNext(false);
+
+                }));
+            _compositeDisposable.Add(saveQuery);
+            SaveQueryCommand = saveQuery;
+
+            var saveResults = new ReactiveCommand(Observable.Return(false));
+            _compositeDisposable.Add(
+                saveResults.Subscribe(x =>
+                {
+                    // not sure yet what to do here, have to wok out the execute stuff first.
+                    // and how to display said results.
+                }));
+            SaveResultsCommand = saveResults;
+            _compositeDisposable.Add(saveResults);
+            
             StatusMessage = "Ready";
         }
 
@@ -97,7 +179,6 @@ namespace Theodorus2.ViewModels
         public ICommand SaveQueryCommand { get; private set; }
         public ICommand SaveResultsCommand { get; private set; }
         public ICommand OptionsCommand { get; private set; }
-        public ICommand GotoCommand { get; private set; }
         
         public IAboutDialogService AboutDialogService
         {
@@ -121,6 +202,35 @@ namespace Theodorus2.ViewModels
             {
                 return SharedContext.Instance.Kernel.Get<IOptionsDialogService>();
             }
+        }
+
+        public ITextFileIOService TextFileIOService
+        {
+            get
+            {
+                return SharedContext.Instance.Kernel.Get<ITextFileIOService>();
+            }
+        }
+
+        public IFileSelectionService FileSelectionService
+        {
+            get
+            {
+                return SharedContext.Instance.Kernel.Get<IFileSelectionService>();
+            }
+        }
+
+        public IUserPromptingService UserPromptingService
+        {
+            get
+            {
+                return SharedContext.Instance.Kernel.Get<IUserPromptingService>();
+            }
+        }
+
+        public bool IsDirty
+        {
+            get { return _dirtyPropertyHelper.Value; }
         }
 
         public bool IsConnected
