@@ -65,6 +65,15 @@ namespace Theodorus2.ViewModels
             ExecuteCommand = execute;
             _compositeDisposable.Add(execute);
 
+            var open = new ReactiveCommand();
+            _compositeDisposable.Add(
+            open.Subscribe(x =>
+            {
+                queryExecutor.ConnectionString = ConnectionInformationService.GetConnectionString();
+            }));
+            OpenCommand = open;
+            _compositeDisposable.Add(open);
+
             StatusMessage = "Ready";
 
         }
@@ -72,12 +81,21 @@ namespace Theodorus2.ViewModels
         public ICommand ExecuteCommand { get; private set; }
         public ICommand ExitCommand { get; private set; }
         public ICommand AboutCommand { get; private set; }
+        public ICommand OpenCommand { get; private set; }
 
         public IAboutDialogService AboutDialogService
         {
             get
             {
                 return SharedContext.Instance.Kernel.Get<IAboutDialogService>();
+            }
+        }
+
+        public IConnectionInformationService ConnectionInformationService
+        {
+            get
+            {
+                return SharedContext.Instance.Kernel.Get<IConnectionInformationService>();
             }
         }
 

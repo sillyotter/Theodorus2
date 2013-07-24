@@ -10,15 +10,19 @@ namespace Theodorus2.Support
     {
         public override void Load()
         {
-            Bind<MainWindowView, IAboutDialogService>().To<MainWindowView>().InSingletonScope();
-            Bind<MainWindowViewModel>().To<MainWindowViewModel>().InSingletonScope();
+            Bind<MainWindowView, IAboutDialogService, IConnectionInformationService>().To<MainWindowView>().InSingletonScope();
+            Bind<MainWindowViewModel>().ToSelf();
 
             Bind<IMessageBus>().To<MessageBus>().InSingletonScope();
             Bind<IQueryExecutionService>().To<SqliteQueryExecutionService>().InSingletonScope();
 
             Bind<IStatusListener>().To<DefaultStatusListener>();
             Bind<IStatusReporter>().To<DefaultStatusReporter>();
-            
+
+            Bind<About>().ToSelf();
+            Bind<ConnectionDialog, IFileSelectorService>().To<ConnectionDialog>().InSingletonScope();
+            Bind<IConnectionDialogViewModel>().To<ConnectionDialogViewModel>();
+
             //Bind<IViewModel>().To<StatusLogViewModel>().InSingletonScope();
             //Bind<IViewModel>().To<DefaultDisplayViewModel>().InSingletonScope();
             //Bind<IViewModel>().To<DefaultRealViewModel>().InSingletonScope();

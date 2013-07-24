@@ -9,5 +9,7 @@ namespace Theodorus2.Support
         {
             return Task.FromResult(true);
         }
+
+        public string ConnectionString { get; set; }
     }
 }

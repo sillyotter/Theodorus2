@@ -1,16 +1,21 @@
-﻿using System.Windows;
+﻿using System;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using Ninject;
 using Theodorus2.Interfaces;
+using Theodorus2.Support;
 using Theodorus2.ViewModels;
 
 namespace Theodorus2.Views
 {
-    public partial class MainWindowView : IAboutDialogService
+    public partial class MainWindowView : IAboutDialogService, IConnectionInformationService, IDisposable
     {
+        private readonly MainWindowViewModel _vm;
+
         public MainWindowView(MainWindowViewModel vm)
         {
+            _vm = vm;
             DataContext = vm;
             InitializeComponent();
 
@@ -26,7 +31,22 @@ namespace Theodorus2.Views
 
         public void ShowAboutDialog()
         {
-            MessageBox.Show(this, "About");
+            var about = SharedContext.Instance.Kernel.Get<About>();
+            about.ShowDialog();
+        }
+
+        public string GetConnectionString()
+        {
+            using (var con = SharedContext.Instance.Kernel.Get<ConnectionDialog>())
+            {
+                var res = con.ShowDialog();
+                return res == true ? con.ConnectionString : null;
+            }
+        }
+
+        public void Dispose()
+        {
+            _vm.Dispose();
         }
     }
 }
