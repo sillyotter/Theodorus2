@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace Theodorus2.Interfaces
 {
-    public interface IResultRenderer
+    public interface IResultsPresenter
     {
-        Task<string> RenderResults(IEnumerable<IQueryResult> input);
+        Task PresentResults(IEnumerable<IQueryResult> results);
     }
 }

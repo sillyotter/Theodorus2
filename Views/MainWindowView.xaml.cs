@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
@@ -12,11 +13,6 @@ using Theodorus2.ViewModels;
 
 namespace Theodorus2.Views
 {
-    public interface IResultsPresenter
-    {
-        void PresentResults(IEnumerable<IQueryResult> results);
-    }
-
     public partial class MainWindowView : IAboutDialogService, IConnectionInformationService, 
         IFileSelectionService, IOptionsDialogService, IUserPromptingService, IResultsPresenter,
         IDisposable
@@ -120,9 +116,9 @@ namespace Theodorus2.Views
                 MessageBoxResult.OK);
         }
 
-        public void PresentResults(IEnumerable<IQueryResult> results)
+        public async Task PresentResults(IEnumerable<IQueryResult> results)
         {
-            Browser.NavigateToString(_renderer.RenderResults(results));
+            Browser.NavigateToString(await _renderer.RenderResults(results));
         }
     }
 }

@@ -1,46 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows.Automation.Peers;
-using System.Xml;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Theodorus2.Interfaces;
 
 namespace Theodorus2.Support
 {
-    public static class XDocumentEx
-    {
-        public static string ToStringWithDeclaration(this XDocument doc)
-        {
-            if (doc == null)
-            {
-                throw new ArgumentNullException("doc");
-            }
-
-            using (var ms = new MemoryStream())
-            using (var xw = XmlWriter.Create(ms,
-                new XmlWriterSettings
-                {
-                    ConformanceLevel = ConformanceLevel.Document,
-                    Encoding = Encoding.UTF8,
-                    Indent = true,
-                    OmitXmlDeclaration = false,
-                }))
-            {
-                doc.Save(xw);
-                xw.Flush();
-                ms.Flush();
-                return Encoding.UTF8.GetString(ms.ToArray());
-            }
-        }
-    }
-
     public class DefaultHtmlRenderer : IResultRenderer
     {
-        private static string styleData = @"
+        private const string StyleData = @"
 		    body {
 		        font-size: 12px;
 		    }
@@ -126,63 +96,71 @@ namespace Theodorus2.Support
 			}
 ";
 
-        // TODO: Contact options dband find limits, take only that manyfrom each datatable
-        public string RenderResults(IEnumerable<IQueryResult> input)
+        // TODO: Contact options db and find limits, take only that many from each data table
+        public Task<string> RenderResults(IEnumerable<IQueryResult> input)
         {
-            XNamespace ns = "http://www.w3.org/1999/xhtml";
-            var result =
-                new XDocument(
-                    new XDeclaration("1.0", "utf-8", "yes"),
-                    new XDocumentType("html", "-//W3C//DTD XHTML 1.1//EN",
-                        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd", null),
-                    new XElement(ns + "html",
-                        new XAttribute("xmlns", ns),
-                        new XAttribute(XNamespace.Xml + "lang", "en-us"),
-                        new XAttribute("lang", "en-us"),
-                        new XElement(ns + "head",
-                            new XElement(ns + "style",
-                                new XAttribute("type", "text/css"), styleData),
-                            new XElement(ns + "title", "Results"),
-                            new XElement(ns + "meta",
-                                new XAttribute("http-equiv", "Content-Type"),
-                                new XAttribute("content", "text/html; charset=utf-8")
-                                )),
-                        new XElement(ns + "body",
-                            from item in input
-                            select new XElement(ns + "div", new XAttribute("class", "answer"),
-                                new XElement(ns + "h3", new XAttribute("class", "queryheader"), "Query:"),
-                                new XElement(ns + "div", new XAttribute("class", "result"),
-                                    new XElement(ns + "pre", item.Query),
-                                    new XElement(ns + "h3", new XAttribute("class", "resulthreader"),
-                                        new XElement(ns + "span",
-                                            new XAttribute("style", "font-size: small; float: right;"),
-                                            String.Format("(Elapsed {0} ms.)", item.Duration)), 
+            return Task.Run(() =>
+            {
+                XNamespace ns = "http://www.w3.org/1999/xhtml";
+                var result =
+                    new XDocument(
+                        new XDeclaration("1.0", "utf-8", "yes"),
+                        new XDocumentType("html", "-//W3C//DTD XHTML 1.1//EN",
+                            "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd", null),
+                        new XElement(ns + "html",
+                            new XAttribute("xmlns", ns),
+                            new XAttribute(XNamespace.Xml + "lang", "en-us"),
+                            new XAttribute("lang", "en-us"),
+                            new XElement(ns + "head",
+                                new XElement(ns + "style",
+                                    new XAttribute("type", "text/css"), StyleData),
+                                new XElement(ns + "title", "Results"),
+                                new XElement(ns + "meta",
+                                    new XAttribute("http-equiv", "Content-Type"),
+                                    new XAttribute("content", "text/html; charset=utf-8")
+                                    )),
+                            new XElement(ns + "body",
+                                from item in input
+                                select new XElement(ns + "div", new XAttribute("class", "answer"),
+                                    new XElement(ns + "h3", new XAttribute("class", "queryheader"), "Query:"),
+                                    new XElement(ns + "div", new XAttribute("class", "result"),
+                                        new XElement(ns + "pre", item.Query),
+                                        new XElement(ns + "h3", new XAttribute("class", "resulthreader"),
+                                            new XElement(ns + "span",
+                                                new XAttribute("style", "font-size: small; float: right;"),
+                                                String.Format("(Elapsed {0} ms.)", item.Duration)),
                                             "Results:"),
-                                    from table in item.Results.Tables.Cast<DataTable>()
-                                    select
-                                        new XElement(ns + "table",
-                                            new XAttribute("cellpadding", "0"),
-                                            new XAttribute("cellspacing", "0"),
-                                            new XAttribute("border", "0"),
-                                            new XAttribute("class", "display"),
-                                            new XElement(ns + "thead",
-                                                new XElement(ns + "tr",
-                                                    from coldef in table.Columns.Cast<DataColumn>()
-                                                    select new XElement(ns + "td", coldef.ColumnName)
-                                                    )),
-                                            new XElement(ns + "tbody",
-                                                from row in table.Rows.Cast<DataRow>()
-                                                select new XElement(ns + "tr",
-                                                    from col in row.ItemArray
-                                                    select new XElement(ns + "td", col.ToString()))),
-                                            new XElement(ns + "tfoot",
-                                                new XElement(ns + "tr",
-                                                    from coldef in table.Columns.Cast<DataColumn>()
-                                                    select new XElement(ns + "td", coldef.ColumnName)
-                                                    ))
-                                            ))))));
+                                        from table in
+                                            item.Results != null
+                                                ? item.Results.Tables.Cast<DataTable>()
+                                                : new DataTable[0]
+                                        select
+                                            new XElement(ns + "table",
+                                                new XAttribute("cellpadding", "0"),
+                                                new XAttribute("cellspacing", "0"),
+                                                new XAttribute("border", "0"),
+                                                new XAttribute("class", "display"),
+                                                new XElement(ns + "thead",
+                                                    new XElement(ns + "tr",
+                                                        from coldef in table.Columns.Cast<DataColumn>()
+                                                        select new XElement(ns + "td", coldef.ColumnName))),
+                                                new XElement(ns + "tbody",
+                                                    from row in table.Rows.Cast<DataRow>()
+                                                    select new XElement(ns + "tr",
+                                                        from col in row.ItemArray
+                                                        select new XElement(ns + "td", col.ToString()))),
+                                                new XElement(ns + "tfoot",
+                                                    new XElement(ns + "tr",
+                                                        from coldef in table.Columns.Cast<DataColumn>()
+                                                        select new XElement(ns + "td", coldef.ColumnName)))),
+                                        item.Exception != null
+                                            ? new XElement(ns + "pre", new XAttribute("class", "error"),
+                                                item.Exception.Message)
+                                            : new XElement(ns + "pre", new XAttribute("class", "result"), "OK")
+                                        )))));
 
-            return result.ToStringWithDeclaration();
+                return result.ToStringWithDeclaration();
+            });
         }
     }
 }

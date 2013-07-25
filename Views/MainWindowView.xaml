@@ -222,7 +222,7 @@
                 IsEnabled="{Binding IsConnected}"
                 support:AvalonEditorHelper.SelectedText="{Binding SelectedText, Mode=OneWayToSource}"
                 FontSize="10pt" Document="{Binding Document, Mode=OneWay}"/>
-            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="5"/>
+            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="Auto" Height="5" Background="#d1d1d1" />
             <WebBrowser x:Name="Browser" Focusable="True" Grid.Row="2" IsEnabled="{Binding HasResults}"></WebBrowser>
             
         </Grid>

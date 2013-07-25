@@ -48,7 +48,7 @@ namespace Theodorus2.ViewModels
             _compositeDisposable.Add(about);
 
             _compositeDisposable.Add(
-                listener.Status.Subscribe(x =>
+                listener.Status.ObserveOn(RxApp.MainThreadScheduler).Subscribe(x =>
                 {
                     if (x == null) return;
                     if (x.CurrentStatus.HasValue)
@@ -90,7 +90,7 @@ namespace Theodorus2.ViewModels
             {
                 var toExecute = !String.IsNullOrEmpty(SelectedText) ? SelectedText : Document.Text;
                 QueryResults = await queryExecutor.Execute(toExecute);
-                ResultPresenterService.PresentResults(QueryResults);
+                await ResultPresenterService.PresentResults(QueryResults);
             });
             ExecuteCommand = execute;
             _compositeDisposable.Add(execute);
@@ -170,13 +170,21 @@ namespace Theodorus2.ViewModels
             _compositeDisposable.Add(saveQuery);
             SaveQueryCommand = saveQuery;
 
-            var saveResults = new ReactiveCommand(Observable.Return(false));
-            _compositeDisposable.Add(
-                saveResults.Subscribe(x =>
+            var saveResults = new ReactiveCommand(this.WhenAny(x => x.HasResults, x => x.Value));
+
+            saveResults.RegisterAsyncTask(async x =>
+            {
+                var fileName = FileSelectionService.PromptToSaveFile("*.html",
+                    "HTML Files (*.html)|*.html)|All Files (*.*)|*.*");
+                if (fileName != null)
                 {
-                    // not sure yet what to do here, have to wok out the execute stuff first.
-                    // and how to display said results.
-                }));
+                    var results = await ResultRenderingService.RenderResults(QueryResults);
+                    await Task.Run(() => TextFileIOService.WriteFile(fileName, results));
+                }
+
+                // not sure yet what to do here, have to wok out the execute stuff first.
+                // and how to display said results.
+            });
             SaveResultsCommand = saveResults;
             _compositeDisposable.Add(saveResults);
             
@@ -191,6 +199,14 @@ namespace Theodorus2.ViewModels
         public ICommand SaveQueryCommand { get; private set; }
         public ICommand SaveResultsCommand { get; private set; }
         public ICommand OptionsCommand { get; private set; }
+
+        public IResultRenderer ResultRenderingService
+        {
+            get
+            {
+                return SharedContext.Instance.Kernel.Get<IResultRenderer>();
+            }
+        }
 
         public IResultsPresenter ResultPresenterService
         {

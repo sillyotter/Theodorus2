@@ -13,50 +13,64 @@ namespace Theodorus2.Support
 {
     class SqliteQueryExecutionService : IQueryExecutionService
     {
+        private readonly IStatusReporter _reporter;
         private static readonly Regex Cleaner = new Regex(@"(--.*$|/\*[^*]*?\*/)", RegexOptions.Compiled|RegexOptions.Multiline);
         private static readonly Regex Splitter = new Regex(@"^\s*GO;*\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
+        public SqliteQueryExecutionService(IStatusReporter reporter)
+        {
+            _reporter = reporter;
+        }
+
         public Task<IEnumerable<IQueryResult>> Execute(string query)
         {
+            if (String.IsNullOrEmpty(ConnectionString)) throw new InvalidOperationException("No connection string");
+
             return Task.Run(() =>
             {
-                var cleaned = Cleaner.Replace(query, "");
-                var splitQuery = Splitter.Split(cleaned);
-                
-                var toBeExecuted =
-                    from chunk in splitQuery
-                    let c = chunk.Trim()
-                    where c.Length != 0
-                    select c;
-
-                var results = new List<IQueryResult>();
-
-                using (var con = new SQLiteConnection(ConnectionString))
+                using (_reporter.BeginMonitoredWork("Executing..."))
                 {
-                    foreach (var chunk in toBeExecuted)
+                    var cleaned = Cleaner.Replace(query, "");
+                    var splitQuery = Splitter.Split(cleaned);
+
+                    var toBeExecuted =
+                        from chunk in splitQuery
+                        let c = chunk.Trim()
+                        where c.Length != 0
+                        select c;
+
+                    var results = new List<IQueryResult>();
+
+                    using (var con = new SQLiteConnection(ConnectionString))
                     {
-                        try
+                        var chunkedList = toBeExecuted.ToList();
+                        var progressChunk = 100/chunkedList.Count;
+
+                        foreach (var chunk in chunkedList)
                         {
-                            using (var cmd = con.CreateCommand())
+                            try
                             {
-                                var sw = Stopwatch.StartNew();
-                                cmd.CommandType = CommandType.Text;
-                                cmd.CommandText = chunk;
-                                var ds = new DataSet();
-                                var da = new SQLiteDataAdapter(cmd);
-                                da.Fill(ds);
-                                sw.Stop();
-                                results.Add(new QueryResult(chunk, sw.ElapsedMilliseconds, ds));
+                                using (var cmd = con.CreateCommand())
+                                {
+                                    var sw = Stopwatch.StartNew();
+                                    cmd.CommandType = CommandType.Text;
+                                    cmd.CommandText = chunk;
+                                    var ds = new DataSet();
+                                    var da = new SQLiteDataAdapter(cmd);
+                                    da.Fill(ds);
+                                    sw.Stop();
+                                    results.Add(new QueryResult(chunk, sw.ElapsedMilliseconds, ds));
+                                }
                             }
-                        }
-                        catch (SQLiteException e)
-                        {
-                            results.Add(new QueryResult(chunk, 0, e));
+                            catch (SQLiteException e)
+                            {
+                                results.Add(new QueryResult(chunk, 0, e));
+                            }
+                            _reporter.ReportProgress(progressChunk);
                         }
                     }
+                    return results.ToEnumerable();
                 }
-                return results.ToEnumerable();
-
             });
         }
 
