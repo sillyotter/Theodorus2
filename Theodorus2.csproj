@@ -123,6 +123,7 @@
     <Compile Include="Interfaces\IConnectionInformationService.cs" />
     <Compile Include="Interfaces\IOptionsDialogService.cs" />
     <Compile Include="Interfaces\ITextFileIOService.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Support\DefaultStatusListener.cs" />
     <Compile Include="Support\DefaultStatusReporter.cs" />
     <Compile Include="Support\DefaultTextFileIOService.cs" />

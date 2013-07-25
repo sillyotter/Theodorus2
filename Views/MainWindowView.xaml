@@ -6,12 +6,18 @@
         xmlns:viewModels="clr-namespace:Theodorus2.ViewModels"
         xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:support="clr-namespace:Theodorus2.Support"
+        xmlns:local="clr-namespace:Theodorus2.Properties"
         mc:Ignorable="d"
         Title="Theodorus SQLite Query Tool" 
-        Height="350" 
-        Width="525"
+        Height="{Binding Source={x:Static local:Settings.Default}, Path=Height, Mode=TwoWay}" 
+        Width="{Binding Source={x:Static local:Settings.Default}, Path=Width, Mode=TwoWay}"
+        Left="{Binding Source={x:Static local:Settings.Default}, Path=Left, Mode=TwoWay}"
+        Top="{Binding Source={x:Static local:Settings.Default}, Path=Top, Mode=TwoWay}"
+        Closing="MainWindowView_OnClosing"
+        WindowState="{Binding Source={x:Static local:Settings.Default}, Path=WindowState, Mode=TwoWay}"
         Icon="/Theodorus2;component/Assets/Icons/MainWindow.ico"
         ResizeMode="CanResizeWithGrip"
+        
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel, IsDesignTimeCreatable=False}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -211,9 +217,9 @@
         </StatusBar>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="7*"/>
+                <RowDefinition Height="{Binding Source={x:Static local:Settings.Default}, Path=EditorHeight, Mode=TwoWay}"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="3*"/>
+                <RowDefinition Height="{Binding Source={x:Static local:Settings.Default}, Path=ResultHeight, Mode=TwoWay}"/>
             </Grid.RowDefinitions>
             <avalonedit:TextEditor x:Name="TextEditor"
                 Grid.Row="0"

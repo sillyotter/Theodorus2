@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
@@ -8,6 +9,7 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Microsoft.Win32;
 using Ninject;
 using Theodorus2.Interfaces;
+using Theodorus2.Properties;
 using Theodorus2.Support;
 using Theodorus2.ViewModels;
 
@@ -94,9 +96,11 @@ namespace Theodorus2.Views
 
         public void ShowOptionsDialog()
         {
-            var options = SharedContext.Instance.Kernel.Get<OptionsDialog>();
-            options.Owner = this;
-            options.ShowDialog();
+            using (var options = SharedContext.Instance.Kernel.Get<OptionsDialog>())
+            {
+                options.Owner = this;
+                options.ShowDialog();
+            }
         }
 
         public void Dispose()
@@ -119,6 +123,11 @@ namespace Theodorus2.Views
         public async Task PresentResults(IEnumerable<IQueryResult> results)
         {
             Browser.NavigateToString(await _renderer.RenderResults(results));
+        }
+        
+        private void MainWindowView_OnClosing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = _vm.IsWorking;
         }
     }
 }

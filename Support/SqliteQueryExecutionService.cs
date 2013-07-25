@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Ninject.Infrastructure.Language;
 using Theodorus2.Interfaces;
+using Theodorus2.Properties;
 
 namespace Theodorus2.Support
 {

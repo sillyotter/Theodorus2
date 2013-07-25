@@ -19,8 +19,6 @@
         <StackPanel Grid.Row="0">
             <GroupBox Header="General" Margin="5">
                 <StackPanel>
-                    <CheckBox Margin="5" IsChecked="{Binding Path=ShowQueryWithResults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">Display query text with results?</CheckBox>
-                    <Label></Label>
                     <Label>Limit Query Results:</Label>
                     <TextBox Text="{Binding Path=ResultsLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 </StackPanel>

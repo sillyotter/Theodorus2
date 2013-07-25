@@ -1,16 +1,31 @@
-﻿using Theodorus2.ViewModels;
+﻿using System;
+using System.Reactive.Disposables;
+using Theodorus2.ViewModels;
 
 namespace Theodorus2.Views
 {
-    public partial class OptionsDialog
+    public partial class OptionsDialog : IDisposable
     {
-        private readonly OptionsDialogViewModel _vm;
+        private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
 
         public OptionsDialog(OptionsDialogViewModel vm)
         {
-            _vm = vm;
+            
             InitializeComponent();
-            DataContext = _vm;
+            DataContext = vm;
+
+            _compositeDisposable.Add(
+                vm.Results.Subscribe(x =>
+                {
+                    DialogResult = x;
+                    Close();
+                }));
+            _compositeDisposable.Add(vm);
+        }
+
+        public void Dispose()
+        {
+            _compositeDisposable.Dispose();
         }
     }
 }
