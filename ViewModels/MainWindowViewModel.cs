@@ -90,6 +90,7 @@ namespace Theodorus2.ViewModels
             {
                 var toExecute = !String.IsNullOrEmpty(SelectedText) ? SelectedText : Document.Text;
                 QueryResults = await queryExecutor.Execute(toExecute);
+                ResultPresenterService.PresentResults(QueryResults);
             });
             ExecuteCommand = execute;
             _compositeDisposable.Add(execute);
@@ -190,7 +191,14 @@ namespace Theodorus2.ViewModels
         public ICommand SaveQueryCommand { get; private set; }
         public ICommand SaveResultsCommand { get; private set; }
         public ICommand OptionsCommand { get; private set; }
-        
+
+        public IResultsPresenter ResultPresenterService
+        {
+            get
+            {
+                return SharedContext.Instance.Kernel.Get<IResultsPresenter>();
+            }
+        }
         public IAboutDialogService AboutDialogService
         {
             get
