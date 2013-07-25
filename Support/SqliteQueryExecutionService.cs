@@ -4,8 +4,10 @@ using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.SqlServer.Server;
 using Ninject.Infrastructure.Language;
 using Theodorus2.Interfaces;
 using Theodorus2.Properties;
@@ -44,6 +46,7 @@ namespace Theodorus2.Support
 
                     using (var con = new SQLiteConnection(ConnectionString))
                     {
+                        con.Open();
                         var chunkedList = toBeExecuted.ToList();
                         var progressChunk = 100/chunkedList.Count;
 
@@ -56,9 +59,45 @@ namespace Theodorus2.Support
                                     var sw = Stopwatch.StartNew();
                                     cmd.CommandType = CommandType.Text;
                                     cmd.CommandText = chunk;
+                                    
                                     var ds = new DataSet();
-                                    var da = new SQLiteDataAdapter(cmd);
-                                    da.Fill(ds);
+
+                                    // this is annoying, dataadapter.fill() has overrides that work on limitingthe number of records
+                                    // but most of them dont work right.  the closet i got was ignoring the limitse on multiple tables.
+                                    using (var r = cmd.ExecuteReader(CommandBehavior.SequentialAccess))
+                                    {
+                                        do
+                                        {
+                                            var schtab = r.GetSchemaTable();
+                                            if (schtab == null) throw new InvalidOperationException();
+                                            
+                                            var colNames = new List<string>();
+                                            foreach (var item in schtab.Rows.Cast<DataRow>())
+                                            {
+                                                var colName = (string) item["ColumnName"];
+                                                while (colNames.Contains(colName))
+                                                {
+                                                    colName += "1";
+                                                }
+                                                item["ColumnName"] = colName;
+                                                colNames.Add(colName);
+                                            }
+
+                                            var ndt = new DataTable();
+                                            ndt.Columns.AddRange(schtab.Rows.Cast<DataRow>().Select(x => new DataColumn((string)x["ColumnName"],(Type)x["DataType"])).ToArray());
+                                            var row = new object[schtab.Rows.Count];
+                                            var count = 0;
+                                            while (r.Read() && count < Settings.Default.ResultLimit)
+                                            {
+                                                r.GetValues(row);
+                                                ndt.LoadDataRow(row, LoadOption.OverwriteChanges);
+                                                count ++;
+                                            }
+                                            ds.Tables.Add(ndt);
+
+                                        } while (r.NextResult());
+                                    }
+                                    
                                     sw.Stop();
                                     results.Add(new QueryResult(chunk, sw.ElapsedMilliseconds, ds));
                                 }

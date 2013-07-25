@@ -18,7 +18,7 @@ namespace Theodorus2.ViewModels
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
         public OptionsDialogViewModel()
         {
-            AddValidator(x => ResultsLimit, () => ResultsLimit <= 0 ? "Result limit must be greater than 0" : null);
+            AddValidator(x => x.ResultsLimit, () => ResultsLimit <= 0 ? "Result limit must be greater than 0" : null);
 
             var okCmd = new ReactiveCommand(HasErrorsObservable.Select(x => !x));
             _compositeDisposable.Add(
