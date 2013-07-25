@@ -9,7 +9,6 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Microsoft.Win32;
 using Ninject;
 using Theodorus2.Interfaces;
-using Theodorus2.Properties;
 using Theodorus2.Support;
 using Theodorus2.ViewModels;
 
@@ -37,6 +36,8 @@ namespace Theodorus2.Views
                     TextEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 }
             }
+            //I tried to do this with an attached property, but it didn't work right...
+            TextEditor.TextArea.SelectionChanged += (sender, args) => _vm.SelectedText = TextEditor.SelectedText;
         }
 
         public string PromptToOpenFile(string defaultExtension, string filters)

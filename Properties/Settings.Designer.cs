@@ -85,10 +85,10 @@ namespace Theodorus2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("200")]
-        public int EditorHeight {
+        [global::System.Configuration.DefaultSettingValueAttribute("3*")]
+        public global::System.Windows.GridLength EditorHeight {
             get {
-                return ((int)(this["EditorHeight"]));
+                return ((global::System.Windows.GridLength)(this["EditorHeight"]));
             }
             set {
                 this["EditorHeight"] = value;
@@ -97,10 +97,10 @@ namespace Theodorus2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("300")]
-        public string ResultHeight {
+        [global::System.Configuration.DefaultSettingValueAttribute("7*")]
+        public global::System.Windows.GridLength ResultHeight {
             get {
-                return ((string)(this["ResultHeight"]));
+                return ((global::System.Windows.GridLength)(this["ResultHeight"]));
             }
             set {
                 this["ResultHeight"] = value;

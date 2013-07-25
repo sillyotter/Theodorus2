@@ -17,11 +17,11 @@
     <Setting Name="Height" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">500</Value>
     </Setting>
-    <Setting Name="EditorHeight" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">200</Value>
+    <Setting Name="EditorHeight" Type="System.Windows.GridLength" Scope="User">
+      <Value Profile="(Default)">3*</Value>
     </Setting>
-    <Setting Name="ResultHeight" Type="System.String" Scope="User">
-      <Value Profile="(Default)">300</Value>
+    <Setting Name="ResultHeight" Type="System.Windows.GridLength" Scope="User">
+      <Value Profile="(Default)">7*</Value>
     </Setting>
     <Setting Name="ResultLimit" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1000</Value>
