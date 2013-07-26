@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using Ninject;
 using Theodorus2.Interfaces;
-using Theodorus2.Views;
+using Theodorus2.Support;
 
-namespace Theodorus2.Support
+namespace Theodorus2.Views.Dialogs
 {
     public class ConnectionInformationService : IConnectionInformationService
     {

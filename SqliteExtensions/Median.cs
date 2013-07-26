@@ -14,6 +14,8 @@ namespace Theodorus2.SqliteExtensions
             contextData = storedData;
 		}
 
+        // could be changed to use selection algorithm to be a bit faster.
+        // https://en.wikipedia.org/wiki/Selection_algorithm
 		public override object Final(object contextData)
 		{
 			if (contextData == null) return null;

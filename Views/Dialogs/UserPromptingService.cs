@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using Theodorus2.Interfaces;
 
-namespace Theodorus2.Support
+namespace Theodorus2.Views.Dialogs
 {
     public class UserPromptingService : IUserPromptingService
     {

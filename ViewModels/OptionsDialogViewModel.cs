@@ -21,24 +21,19 @@ namespace Theodorus2.ViewModels
             AddValidator(x => x.ResultsLimit, () => ResultsLimit <= 0 ? "Result limit must be greater than 0" : null);
 
             var okCmd = new ReactiveCommand(HasErrorsObservable.Select(x => !x));
-            _compositeDisposable.Add(
-                okCmd.Subscribe(x =>
-                {
-                    _result.OnNext(true);
-                    _result.OnCompleted();
-                }));
             _compositeDisposable.Add(okCmd);
             OkCommand = okCmd;
 
             var cancelCommand = new ReactiveCommand();
-            _compositeDisposable.Add(
-                okCmd.Subscribe(x =>
-                {
-                    _result.OnNext(false);
-                    _result.OnCompleted();
-                }));
             _compositeDisposable.Add(cancelCommand);
             CancelCommand = cancelCommand;
+
+            _compositeDisposable.Add(
+                okCmd.Select(x => true).Merge(cancelCommand.Select(x => false)).Subscribe(x =>
+                {
+                    _result.OnNext(x);
+                    _result.OnCompleted();
+                }));
         }
         
         public IObservable<bool> Results

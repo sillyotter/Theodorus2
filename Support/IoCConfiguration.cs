@@ -3,6 +3,7 @@ using ReactiveUI;
 using Theodorus2.Interfaces;
 using Theodorus2.ViewModels;
 using Theodorus2.Views;
+using Theodorus2.Views.Dialogs;
 
 namespace Theodorus2.Support
 {

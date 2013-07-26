@@ -76,9 +76,11 @@ namespace Theodorus2.ViewModels
             BrowseCommand = browseCommand;
 
             var okCommand = new ReactiveCommand(HasErrorsObservable.Select(x => !x));
+            _compositeDisposable.Add(okCommand);
             OkCommand = okCommand;
 
             var cancelCommand = new ReactiveCommand();
+            _compositeDisposable.Add(cancelCommand);
             CancelCommand = cancelCommand;
 
             _compositeDisposable.Add(

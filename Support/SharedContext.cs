@@ -15,7 +15,6 @@ namespace Theodorus2.Support
         {
             Kernel = new StandardKernel();
             RxApp.Initialize();
-            LogHost.Default.Level = LogLevel.Debug;
             RxApp.InitializeCustomResolver((obj, typ) => Kernel.Bind(typ).ToConstant(obj));
             Kernel.Load(AppDomain.CurrentDomain.GetAssemblies());
         }

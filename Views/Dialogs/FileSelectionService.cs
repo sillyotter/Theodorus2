@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
 using Theodorus2.Interfaces;
 
-namespace Theodorus2.Support
+namespace Theodorus2.Views.Dialogs
 {
     public class FileSelectionService : IFileSelectionService
     {
