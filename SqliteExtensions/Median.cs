@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 
 namespace Theodorus2.SqliteExtensions
@@ -9,18 +9,22 @@ namespace Theodorus2.SqliteExtensions
 		public override void Step(object[] args, int stepNumber, ref object contextData)
 		{
 			dynamic item = args[0];
-			var median = (contextData is double ? (double) contextData : 0);
-
-			median += 0.001*Math.Sign(item - median);
-
-			contextData = median;
+			var storedData = (contextData as List<double> ?? new List<double>());
+            storedData.Add(item);
+            contextData = storedData;
 		}
 
 		public override object Final(object contextData)
 		{
 			if (contextData == null) return null;
-			var median = contextData is double ? (double) contextData : 0; 
-			return median;
+            var storedData = (contextData as List<double> ?? new List<double>());
+            storedData.Sort();
+		    var len = storedData.Count;
+		    if (len%2 == 0)
+		    {
+		        return (storedData[(len/2)-1] + storedData[(len/2)])/2.0;
+		    }
+		    return storedData[((len+1)/2)-1];
 		}
 	}
 }
