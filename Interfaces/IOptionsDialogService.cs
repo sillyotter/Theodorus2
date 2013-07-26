@@ -1,6 +1,6 @@
 ﻿namespace Theodorus2.Interfaces
 {
-    public interface IOptionsDialogService
+    public interface IOptionsDialogService 
     {
         void ShowOptionsDialog();
     }

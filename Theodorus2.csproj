@@ -169,7 +169,11 @@
     <Compile Include="Interfaces\IResultRenderer.cs" />
     <Compile Include="Interfaces\IUserPromptingService.cs" />
     <Compile Include="Support\DefaultHtmlRenderer.cs" />
-    <Compile Include="Interfaces\IResultsPresenter.cs" />
+    <Compile Include="Support\AboutDialogService.cs" />
+    <Compile Include="Support\ConnectionInformationService.cs" />
+    <Compile Include="Support\UserPromptingService.cs" />
+    <Compile Include="Support\FileSelectionService.cs" />
+    <Compile Include="Support\OptionDialogService.cs" />
     <Compile Include="Views\OptionsDialog.xaml.cs">
       <DependentUpon>OptionsDialog.xaml</DependentUpon>
     </Compile>
@@ -195,7 +199,6 @@
     </Compile>
     <Compile Include="Interfaces\IQueryExecutionService.cs" />
     <Compile Include="ViewModels\ConnectionDialogViewModel.cs" />
-    <Compile Include="Interfaces\IConnectionDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Support\ValidatableReactiveObject.cs" />
     <Compile Include="Views\About.xaml.cs">

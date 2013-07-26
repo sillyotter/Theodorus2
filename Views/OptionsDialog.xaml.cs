@@ -10,7 +10,6 @@ namespace Theodorus2.Views
 
         public OptionsDialog(OptionsDialogViewModel vm)
         {
-            
             InitializeComponent();
             DataContext = vm;
 

@@ -6,24 +6,22 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Input;
-using Ninject;
 using ReactiveUI;
 using Theodorus2.Interfaces;
 using Theodorus2.Support;
 
 namespace Theodorus2.ViewModels
 {
-    class ConnectionDialogViewModel : ValidatableReactiveObject<ConnectionDialogViewModel>, IConnectionDialogViewModel
+    public class ConnectionDialogViewModel : ValidatableReactiveObject<ConnectionDialogViewModel>
     {
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
         private readonly SQLiteConnectionStringBuilder _builder = new SQLiteConnectionStringBuilder();
         private readonly Subject<bool> _result = new Subject<bool>();
 
-        private static string EnsureGoodDataSource(IConnectionDialogViewModel src)
+        private static string EnsureGoodDataSource(ConnectionDialogViewModel src)
         {
             var ds = src.DataSource;
             return String.IsNullOrWhiteSpace(ds) ? "Must enter a valid path" : null;
-            // maybe pay attention to fail if missing and guarantee file exists?
         }
 
         private static string EnsurePositiveInteger(int val)
@@ -36,7 +34,7 @@ namespace Theodorus2.ViewModels
             return (val & (val - 1)) != 0 ? "Value must be a power of two" : null;
         }
 
-        public ConnectionDialogViewModel()
+        public ConnectionDialogViewModel(IFileSelectionService fileSelectionService)
         {
             _compositeDisposable.Add(
                 Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
@@ -72,7 +70,7 @@ namespace Theodorus2.ViewModels
             _compositeDisposable.Add(
                 browseCommand.Subscribe(x =>
                 {
-                    DataSource = FileSelectionService.PromptToOpenFile(".sqlite",
+                    DataSource = fileSelectionService.PromptToOpenFile(".sqlite",
                         "Database Files (*.sqlite)|*.sqlite|Database Files (*.db)|*.db|All Files (*.*)|*.*");
                 }));
             BrowseCommand = browseCommand;
@@ -98,14 +96,6 @@ namespace Theodorus2.ViewModels
         public IObservable<bool> Results
         {
             get { return _result; }
-        }
-
-        private IFileSelectionService FileSelectionService
-        {
-            get
-            {
-                return SharedContext.Instance.Kernel.Get<IFileSelectionService>();
-            }
         }
 
         public string ConnectionString

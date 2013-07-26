@@ -9,11 +9,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using ICSharpCode.AvalonEdit.Document;
-using Ninject;
 using ReactiveUI;
 using Theodorus2.Interfaces;
 using Theodorus2.Support;
-using Theodorus2.Views;
 
 namespace Theodorus2.ViewModels
 {
@@ -33,7 +31,16 @@ namespace Theodorus2.ViewModels
         private IEnumerable<IQueryResult> _queryResults;
         private string _selectedText;
 
-        public MainWindowViewModel(IStatusListener listener, IQueryExecutionService queryExecutor)
+        public MainWindowViewModel(
+            IStatusListener listener, 
+            IQueryExecutionService queryExecutor, 
+            IResultRenderer resultRenderer,
+            ITextFileIOService textFileIOService,
+            IAboutDialogService aboutDialogService,
+            IConnectionInformationService connectionInformationService,
+            IOptionsDialogService optionsDialogService,
+            IFileSelectionService fileSelectionService,
+            IUserPromptingService userPromptingService)
         {
             _queryExecutor = queryExecutor;
 
@@ -43,7 +50,7 @@ namespace Theodorus2.ViewModels
             _compositeDisposable.Add(exc);
 
             var about = new ReactiveCommand();
-            about.Subscribe(x => AboutDialogService.ShowAboutDialog());
+            about.Subscribe(x => aboutDialogService.ShowAboutDialog());
             AboutCommand = about;
             _compositeDisposable.Add(about);
 
@@ -90,7 +97,6 @@ namespace Theodorus2.ViewModels
             {
                 var toExecute = !String.IsNullOrEmpty(SelectedText) ? SelectedText : Document.Text;
                 QueryResults = await queryExecutor.Execute(toExecute);
-                await ResultPresenterService.PresentResults(QueryResults);
             });
             ExecuteCommand = execute;
             _compositeDisposable.Add(execute);
@@ -104,7 +110,7 @@ namespace Theodorus2.ViewModels
             _compositeDisposable.Add(
                 open.Subscribe(x =>
                 {
-                    _queryExecutor.ConnectionString = ConnectionInformationService.GetConnectionString();
+                    _queryExecutor.ConnectionString = connectionInformationService.GetConnectionString();
                     this.RaisePropertyChanged(r => r.IsConnected);
                 }));
             OpenDatabaseCommand = open;
@@ -112,7 +118,7 @@ namespace Theodorus2.ViewModels
 
             var options = new ReactiveCommand();
             _compositeDisposable.Add(
-                options.Subscribe(x => OptionsDialogService.ShowOptionsDialog()));
+                options.Subscribe(x => optionsDialogService.ShowOptionsDialog()));
             _compositeDisposable.Add(options);
             OptionsCommand = options;
 
@@ -121,14 +127,14 @@ namespace Theodorus2.ViewModels
             {
                 if (IsDirty)
                 {
-                    if (!UserPromptingService.PromptUserYesNo("Open",
+                    if (!userPromptingService.PromptUserYesNo("Open",
                         "Current document has not been saved, do you want to continue and loose those changes?"))
                     {
                         return;
                     }
                 }
 
-                var fileName = FileSelectionService.PromptToOpenFile("*.sql",
+                var fileName = fileSelectionService.PromptToOpenFile("*.sql",
                     "SQL Files (*.sql)|*.sql|Text Files (*.txt)|*.txt|All Files (*.*)|*.*");
 
                 if (fileName == null) return;
@@ -136,16 +142,16 @@ namespace Theodorus2.ViewModels
                 string data = null;
                 try
                 {
-                    data = await Task.Run(() => TextFileIOService.ReadFile(fileName));
+                    data = await Task.Run(() => textFileIOService.ReadFile(fileName));
                 }
                 catch (FileNotFoundException)
                 {
-                    UserPromptingService.DisplayAlert(String.Format("The file {0} was not found.", fileName));
+                    userPromptingService.DisplayAlert(String.Format("The file {0} was not found.", fileName));
                     return;
                 }
                 catch (IOException)
                 {
-                    UserPromptingService.DisplayAlert(String.Format("The file {0} was not read.", fileName));
+                    userPromptingService.DisplayAlert(String.Format("The file {0} was not read.", fileName));
                 }
 
                 Document.Text = data;
@@ -158,11 +164,11 @@ namespace Theodorus2.ViewModels
             var saveQuery = new ReactiveCommand(this.WhenAny(x => x.IsDirty, x => x.Value));
             saveQuery.RegisterAsyncTask(async x =>
             {
-                var fileName = FileSelectionService.PromptToSaveFile("*.sql",
+                var fileName = fileSelectionService.PromptToSaveFile("*.sql",
                     "SQL Files (*.sql)|*.sql|Text Files (*.txt)|*.txt|All Files (*.*)|*.*");
                 if (fileName != null)
                 {
-                    await Task.Run(() => TextFileIOService.WriteFile(fileName, Document.Text));
+                    await Task.Run(() => textFileIOService.WriteFile(fileName, Document.Text));
                 }
                 _dirtyState.OnNext(false);
 
@@ -174,16 +180,13 @@ namespace Theodorus2.ViewModels
 
             saveResults.RegisterAsyncTask(async x =>
             {
-                var fileName = FileSelectionService.PromptToSaveFile("*.html",
+                var fileName = fileSelectionService.PromptToSaveFile("*.html",
                     "HTML Files (*.html)|*.html)|All Files (*.*)|*.*");
                 if (fileName != null)
                 {
-                    var results = await ResultRenderingService.RenderResults(QueryResults);
-                    await Task.Run(() => TextFileIOService.WriteFile(fileName, results));
+                    var results = await resultRenderer.RenderResults(QueryResults);
+                    await Task.Run(() => textFileIOService.WriteFile(fileName, results));
                 }
-
-                // not sure yet what to do here, have to wok out the execute stuff first.
-                // and how to display said results.
             });
             SaveResultsCommand = saveResults;
             _compositeDisposable.Add(saveResults);
@@ -199,69 +202,7 @@ namespace Theodorus2.ViewModels
         public ICommand SaveQueryCommand { get; private set; }
         public ICommand SaveResultsCommand { get; private set; }
         public ICommand OptionsCommand { get; private set; }
-
-        public IResultRenderer ResultRenderingService
-        {
-            get
-            {
-                return SharedContext.Instance.Kernel.Get<IResultRenderer>();
-            }
-        }
-
-        public IResultsPresenter ResultPresenterService
-        {
-            get
-            {
-                return SharedContext.Instance.Kernel.Get<IResultsPresenter>();
-            }
-        }
-        public IAboutDialogService AboutDialogService
-        {
-            get
-            {
-                return SharedContext.Instance.Kernel.Get<IAboutDialogService>();
-            }
-        }
-
-        public IConnectionInformationService ConnectionInformationService
-        {
-            get
-            {
-                return SharedContext.Instance.Kernel.Get<IConnectionInformationService>();
-            }
-        }
-
-        public IOptionsDialogService OptionsDialogService
-        {
-            get
-            {
-                return SharedContext.Instance.Kernel.Get<IOptionsDialogService>();
-            }
-        }
-
-        public ITextFileIOService TextFileIOService
-        {
-            get
-            {
-                return SharedContext.Instance.Kernel.Get<ITextFileIOService>();
-            }
-        }
-
-        public IFileSelectionService FileSelectionService
-        {
-            get
-            {
-                return SharedContext.Instance.Kernel.Get<IFileSelectionService>();
-            }
-        }
-
-        public IUserPromptingService UserPromptingService
-        {
-            get
-            {
-                return SharedContext.Instance.Kernel.Get<IUserPromptingService>();
-            }
-        }
+     
 
         public IEnumerable<IQueryResult> QueryResults
         {
@@ -318,7 +259,6 @@ namespace Theodorus2.ViewModels
         {
             get { return _document; }
         }
-
     
         public void Dispose()
         {

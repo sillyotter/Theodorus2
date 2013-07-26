@@ -1,16 +1,15 @@
 ﻿using System.Reactive.Disposables;
-using Microsoft.Win32;
-using Theodorus2.Interfaces;
 using System;
+using Theodorus2.ViewModels;
 
 namespace Theodorus2.Views
 {
     public partial class ConnectionDialog : IDisposable
 	{
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
-        private readonly IConnectionDialogViewModel _vm;
+        private readonly ConnectionDialogViewModel _vm;
 	    
-		public ConnectionDialog(IConnectionDialogViewModel vm)
+		public ConnectionDialog(ConnectionDialogViewModel vm)
 		{
 		    _vm = vm;
 		    InitializeComponent();

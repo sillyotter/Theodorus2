@@ -146,6 +146,7 @@
       <Word>VIRTUAL</Word>
       <Word>WHEN</Word>
       <Word>WHERE</Word>
+      <Word>GO</Word>
     </Keywords>
 
     <Keywords foreground="Green">
