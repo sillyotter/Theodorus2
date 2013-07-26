@@ -8,6 +8,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:Theodorus2.ViewModels"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"    
         d:DataContext="{d:DesignInstance viewModels:OptionsDialogViewModel, IsDesignTimeCreatable=False}"
         >
@@ -20,7 +21,7 @@
             <GroupBox Header="General" Margin="5">
                 <StackPanel>
                     <Label>Limit Query Results:</Label>
-                    <TextBox Text="{Binding Path=ResultsLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <xctk:IntegerUpDown FormatString="N0" Increment="1" MinHeight="1" Value="{Binding Path=ResultsLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>                    
                 </StackPanel>
             </GroupBox>
         </StackPanel>

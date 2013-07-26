@@ -8,6 +8,7 @@
 	xmlns:sqLite="clr-namespace:System.Data.SQLite;assembly=System.Data.SQLite"
 	xmlns:data="clr-namespace:System.Data;assembly=System.Data"
 	xmlns:viewModels="clr-namespace:Theodorus2.ViewModels"
+	xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 	Title="Open Database" Height="608" Width="444" ResizeMode="NoResize"  ShowInTaskbar="False"
     WindowStartupLocation="CenterOwner" SizeToContent="WidthAndHeight"  
     mc:Ignorable="d"    
@@ -157,29 +158,14 @@
                     <ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Source={StaticResource SyncMode}}" 
 							  SelectedItem="{Binding Path=SyncMode,Mode=TwoWay}"/>
                     <TextBlock Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Default Timeout (sec)</TextBlock>
-                    <TextBox Grid.Column="1" Grid.Row="5">
-                        <TextBox.Text>
-                            <Binding Path="DefaultTimeout" Mode="TwoWay"  UpdateSourceTrigger="PropertyChanged" ValidatesOnNotifyDataErrors="True" >
-                                
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="5" FormatString="N0" Increment="1" MinHeight="1" 
+                                        Value="{Binding Path=DefaultTimeout, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
                     <TextBlock Grid.Column="0" Grid.Row="6" VerticalAlignment="Center">Max Page Count</TextBlock>
-                    <TextBox Grid.Column="1" Grid.Row="6">
-                        <TextBox.Text>
-                            <Binding Path="MaxPageCount" Mode="TwoWay"  UpdateSourceTrigger="PropertyChanged" ValidatesOnNotifyDataErrors="True" >
-                                
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="6" FormatString="N0" Increment="1" MinHeight="1" 
+                                        Value="{Binding Path=MaxPageCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
                     <TextBlock Grid.Column="0" Grid.Row="7" VerticalAlignment="Center">Page Size (bytes)</TextBlock>
-                    <TextBox Grid.Column="1" Grid.Row="7">
-                        <TextBox.Text>
-                            <Binding Path="PageSize" Mode="TwoWay"  UpdateSourceTrigger="PropertyChanged" ValidatesOnNotifyDataErrors="True" >
-                                
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="7" FormatString="N0" Increment="1" MinHeight="1" 
+                                        Value="{Binding Path=PageSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
                 </Grid>
             </GroupBox>
             <GroupBox Header="Options" >
