@@ -340,6 +340,8 @@
 		<col def="S0">ISDotNetInstallerArgsCommit</col>
 		<col def="S0">ISDotNetInstallerArgsUninstall</col>
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
+		<row><td>ISO19770_LocalTag</td><td>{8108665D-94FB-4F0F-80BC-3967B784ADCB}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISO19770_SystemTag</td><td>{E0D28C24-BDAD-4AB4-ABD2-0D75EDA7BB37}</td><td>CommonAppDataFolder</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Theodorus2.Content_Files</td><td>{F4A77088-EAF9-4D1D-8563-73F96095357E}</td><td>INSTALLDIR</td><td>2</td><td/><td>theodorus2.content_files</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Theodorus2.Primary_output</td><td>{3A0CF0F1-968B-4D8C-B226-FF7041A3D110}</td><td>INSTALLDIR</td><td>2</td><td/><td>theodorus2.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
@@ -1050,6 +1052,8 @@
 	<table name="CreateFolder">
 		<col key="yes" def="s72">Directory_</col>
 		<col key="yes" def="s72">Component_</col>
+		<row><td>CommonAppDataFolder</td><td>ISO19770_SystemTag</td></row>
+		<row><td>INSTALLDIR</td><td>ISO19770_LocalTag</td></row>
 	</table>
 
 	<table name="CustomAction">
@@ -1858,6 +1862,8 @@
 	<table name="FeatureComponents">
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
+		<row><td>AlwaysInstall</td><td>ISO19770_LocalTag</td></row>
+		<row><td>AlwaysInstall</td><td>ISO19770_SystemTag</td></row>
 		<row><td>AlwaysInstall</td><td>Theodorus2.Content_Files</td></row>
 		<row><td>AlwaysInstall</td><td>Theodorus2.Primary_output</td></row>
 	</table>
@@ -2132,6 +2138,8 @@
 		<col def="S0">FTPLocation</col>
 		<col def="S0">HTTPLocation</col>
 		<col def="S0">Miscellaneous</col>
+		<row><td>ISO19770_LocalTag</td><td/><td/><td>_61DAD0B4_1EF8_40E7_9B80_2B38536954A1_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISO19770_SystemTag</td><td/><td/><td>_135EC7EE_55CC_4E70_A144_E3526137C6C2_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Theodorus2.Content_Files</td><td/><td/><td>_707670C3_2B93_42DE_B19A_2F62A52E84DB_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Theodorus2.Primary_output</td><td/><td/><td>_7A63EB2B_96EC_44BA_9627_C9068BA556FF_FILTER</td><td/><td/><td/><td/></row>
 	</table>
@@ -3872,6 +3880,7 @@
 	<table name="ISSwidtagProperty">
 		<col key="yes" def="s72">Name</col>
 		<col def="s0">Value</col>
+		<row><td>TagCreatorRegid</td><td>regid.2013-07.io.github.sillyotter</td></row>
 		<row><td>UniqueId</td><td>B683C6AE-A323-4AA1-AB73-A4ECDB21DF04</td></row>
 	</table>
 
@@ -4119,6 +4128,8 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>SccEnabled</td><td>0</td></row>
 		<row><td>SccPath</td><td/></row>
 		<row><td>SchemaVersion</td><td>773</td></row>
+		<row><td>SwidtagLocalComponent</td><td>ISO19770_LocalTag</td></row>
+		<row><td>SwidtagSystemComponent</td><td>ISO19770_SystemTag</td></row>
 		<row><td>Type</td><td>MSIE</td></row>
 	</table>
 
