@@ -141,7 +141,7 @@
     <Compile Include="Interfaces\IConnectionInformationService.cs" />
     <Compile Include="Interfaces\IOptionsDialogService.cs" />
     <Compile Include="Interfaces\ITextFileIOService.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Properties\Settings.cs" />
     <Compile Include="SqliteExtensions\Base64Decode.cs" />
     <Compile Include="SqliteExtensions\Base64Encode.cs" />
     <Compile Include="SqliteExtensions\Compress.cs" />
@@ -182,6 +182,8 @@
     <Compile Include="Support\ReactiveUIExtensions.cs" />
     <Compile Include="Support\IoCConfiguration.cs" />
     <Compile Include="Support\XDocumentEx.cs" />
+    <Compile Include="Interfaces\ISettingsStorageService.cs" />
+    <Compile Include="Support\DefaultSettingsStorageService.cs" />
     <Compile Include="ViewModels\OptionsDialogViewModel.cs" />
     <Compile Include="Interfaces\IFileSelectionService.cs" />
     <Compile Include="Interfaces\IResultRenderer.cs" />

@@ -8,25 +8,26 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Ninject.Infrastructure.Language;
 using Theodorus2.Interfaces;
-using Theodorus2.Properties;
 
 namespace Theodorus2.Support
 {
     public class SqliteQueryExecutionService : IQueryExecutionService
     {
         private readonly IStatusReporter _reporter;
+        private readonly ISettingsStorageService _settings;
         private static readonly Regex Cleaner = new Regex(@"(--.*$|/\*[^*]*?\*/)", RegexOptions.Compiled|RegexOptions.Multiline);
         private static readonly Regex Splitter = new Regex(@"^\s*GO;*\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-        public SqliteQueryExecutionService(IStatusReporter reporter)
+        public SqliteQueryExecutionService(IStatusReporter reporter, ISettingsStorageService settings)
         {
             _reporter = reporter;
+            _settings = settings;
         }
 
         public Task<IEnumerable<IQueryResult>> Execute(string query)
         {
             if (String.IsNullOrEmpty(ConnectionString)) throw new InvalidOperationException("No connection string");
-
+            var resultLimit = _settings.GetValue<int>("ResultLimit");
             return Task.Run(() =>
             {
                 using (_reporter.BeginMonitoredWork("Executing..."))
@@ -60,8 +61,8 @@ namespace Theodorus2.Support
                                     
                                     var ds = new DataSet();
 
-                                    // this is annoying, dataadapter.fill() has overrides that work on limitingthe number of records
-                                    // but most of them dont work right.  the closet i got was ignoring the limitse on multiple tables.
+                                    // this is annoying, dataadapter.fill() has overrides that work on limiting the number of records
+                                    // but most of them don't work right.  the closet i got was ignoring the limits on multiple tables.
                                     using (var r = cmd.ExecuteReader(CommandBehavior.SequentialAccess))
                                     {
                                         do
@@ -85,7 +86,7 @@ namespace Theodorus2.Support
                                             ndt.Columns.AddRange(schtab.Rows.Cast<DataRow>().Select(x => new DataColumn((string)x["ColumnName"],(Type)x["DataType"])).ToArray());
                                             var row = new object[schtab.Rows.Count];
                                             var count = 0;
-                                            while (r.Read() && count < Settings.Default.ResultLimit)
+                                            while (r.Read() && count < resultLimit)
                                             {
                                                 r.GetValues(row);
                                                 ndt.LoadDataRow(row, LoadOption.OverwriteChanges);

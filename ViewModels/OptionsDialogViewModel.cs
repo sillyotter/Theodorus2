@@ -3,23 +3,22 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Input;
-using Microsoft.Win32;
 using ReactiveUI;
-using Theodorus2.Properties;
+using Theodorus2.Interfaces;
 using Theodorus2.Support;
 
 namespace Theodorus2.ViewModels
 {
-    // Use dapper to load a option set from a sqlite db stoed in user directory somewhere.
-    // or, use the regular settings in teh app.config  or te registery
-    // in any event, that  is up to the optionsstore service interface implementations
-    public class OptionsDialogViewModel : ValidatableReactiveObject<OptionsDialogViewModel>, IDisposable
+    public class OptionsDialogViewModel : ValidatableReactiveObject<OptionsDialogViewModel>
     {
+        private readonly ISettingsStorageService _srv;
         private readonly Subject<bool> _result = new Subject<bool>();
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
-        public OptionsDialogViewModel()
+
+        public OptionsDialogViewModel(ISettingsStorageService srv)
         {
-            _resultLimit = Settings.Default.ResultLimit;
+            _srv = srv;
+            _resultLimit = _srv.GetValue<int>("ResultLimit");
 
             AddValidator(x => x.ResultsLimit, () => _resultLimit <= 0 ? "Result limit must be greater than 0" : null);
 
@@ -58,8 +57,7 @@ namespace Theodorus2.ViewModels
 
         private void Save()
         {
-            Settings.Default.ResultLimit = _resultLimit;
-            Settings.Default.Save();
+            _srv.SetValue("ResultLimit", _resultLimit);
         }
 
         public ICommand CancelCommand { get; private set; }

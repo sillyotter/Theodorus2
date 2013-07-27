@@ -29,10 +29,5 @@ namespace Theodorus2
             var mainWindow = SharedContext.Instance.Kernel.Get<MainWindowView>();
             mainWindow.Show();
         }
-
-        private void App_OnExit(object sender, ExitEventArgs e)
-        {
-            Settings.Default.Save();
-        }
     }
 }

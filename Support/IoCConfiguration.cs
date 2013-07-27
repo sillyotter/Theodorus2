@@ -21,6 +21,7 @@ namespace Theodorus2.Support
 
             Bind<IMessageBus>().To<MessageBus>().InSingletonScope();
 
+            Bind<ISettingsStorageService>().To<DefaultSettingsStorageService>();
             Bind<IAboutDialogService>().To<AboutDialogService>();
             Bind<IConnectionInformationService>().To<ConnectionInformationService>();
             Bind<IFileSelectionService>().To<FileSelectionService>();

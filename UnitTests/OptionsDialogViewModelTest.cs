@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Theodorus2.Interfaces;
 using Theodorus2.ViewModels;
 using Xunit;
 
@@ -7,10 +8,12 @@ namespace UnitTests
 {
     public class OptionsDialogViewModelTest
     {
+        private readonly ISettingsStorageService _srv = new DummySettingsStorageService();
+
         [Fact]
         public void OptionsDialogVmTestCancel()
         {
-            using (var target = new OptionsDialogViewModel())
+            using (var target = new OptionsDialogViewModel(_srv))
             {
                 Assert.False(target.HasErrors);
                 var res = new List<bool>();
@@ -26,7 +29,7 @@ namespace UnitTests
         [Fact]
         public void OptionsDialogVmTestOk()
         {
-            using (var target = new OptionsDialogViewModel())
+            using (var target = new OptionsDialogViewModel(_srv))
             {
                 Assert.False(target.HasErrors);
                 var res = new List<bool>();
@@ -42,12 +45,12 @@ namespace UnitTests
         [Fact]
         public void OptionsDialogVmTestCancelDoesntSave()
         {
-            using (var target = new OptionsDialogViewModel())
+            using (var target = new OptionsDialogViewModel(_srv))
             {
                 var orig = target.ResultsLimit;
                 target.ResultsLimit = orig*2;
                 target.CancelCommand.Execute(null);
-                var newTarget = new OptionsDialogViewModel();
+                var newTarget = new OptionsDialogViewModel(_srv);
                 Assert.Equal(orig, newTarget.ResultsLimit);
             }
         }
@@ -55,12 +58,12 @@ namespace UnitTests
         [Fact]
         public void OptionsDialogVmTestOkDoesSave()
         {
-            using (var target = new OptionsDialogViewModel())
+            using (var target = new OptionsDialogViewModel(_srv))
             {
                 var orig = target.ResultsLimit;
                 target.ResultsLimit = orig*2;
                 target.OkCommand.Execute(null);
-                var newTarget = new OptionsDialogViewModel();
+                var newTarget = new OptionsDialogViewModel(_srv);
                 Assert.NotEqual(orig, newTarget.ResultsLimit);
                 Assert.Equal(orig*2, newTarget.ResultsLimit);
             }
@@ -69,7 +72,7 @@ namespace UnitTests
         [Fact]
         public void OptionsDialogVmTestCanExecuteOk()
         {
-            using (var target = new OptionsDialogViewModel())
+            using (var target = new OptionsDialogViewModel(_srv))
             {
                 Assert.False(target.HasErrors);
                 target.ResultsLimit = -1;
@@ -78,6 +81,26 @@ namespace UnitTests
                 target.ResultsLimit = 1000;
                 Assert.False(target.HasErrors);
             }
+        }
+    }
+
+    internal class DummySettingsStorageService : ISettingsStorageService 
+    {
+        private readonly Dictionary<string,object> _storage = new Dictionary<string, object>();
+
+        public DummySettingsStorageService()
+        {
+            _storage["ResultLimit"] = 1000;
+        }
+
+        public T GetValue<T>(string key)
+        {
+            return (T)_storage[key];
+        }
+
+        public void SetValue<T>(string key, T val)
+        {
+            _storage[key] = val;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace UnitTests
         {
             var mb = new MessageBus();
             var sr = new DefaultStatusReporter(mb);
-            var target = new SqliteQueryExecutionService(sr);
+            var target = new SqliteQueryExecutionService(sr, new DummySettingsStorageService());
             Assert.Throws<InvalidOperationException>(() => target.Execute("select * from sqlite_master"));
         }
 
@@ -24,7 +24,7 @@ namespace UnitTests
         {
             var mb = new MessageBus();
             var sr = new DefaultStatusReporter(mb);
-            var target = new SqliteQueryExecutionService(sr) {ConnectionString = "Data Source=:memory:"};
+            var target = new SqliteQueryExecutionService(sr, new DummySettingsStorageService()) { ConnectionString = "Data Source=:memory:" };
             Assert.DoesNotThrow(() => target.Execute("select * from sqlite_master"));
         }
 
@@ -33,7 +33,7 @@ namespace UnitTests
         {
             var mb = new MessageBus();
             var sr = new DefaultStatusReporter(mb);
-            var target = new SqliteQueryExecutionService(sr) {ConnectionString = "Data Source=:memory:"};
+            var target = new SqliteQueryExecutionService(sr, new DummySettingsStorageService()) { ConnectionString = "Data Source=:memory:" };
             var res = await target.Execute("select 1");
             Assert.Equal(1, res.Count());
             Assert.Equal("select 1", res.Single().Query);
@@ -46,7 +46,7 @@ namespace UnitTests
             var mb = new MessageBus();
             var sl = new DefaultStatusListener(mb);
             var sr = new DefaultStatusReporter(mb);
-            var target = new SqliteQueryExecutionService(sr) { ConnectionString = "Data Source=:memory:" };
+            var target = new SqliteQueryExecutionService(sr, new DummySettingsStorageService()) { ConnectionString = "Data Source=:memory:" };
             var pr = new List<StatusReport>();
             using (sl.Status.ToCollection(pr))
             {
@@ -61,7 +61,7 @@ namespace UnitTests
             var mb = new MessageBus();
             var sl = new DefaultStatusListener(mb);
             var sr = new DefaultStatusReporter(mb);
-            var target = new SqliteQueryExecutionService(sr) { ConnectionString = "Data Source=:memory:" };
+            var target = new SqliteQueryExecutionService(sr, new DummySettingsStorageService()) { ConnectionString = "Data Source=:memory:" };
             var pr = new List<StatusReport>();
             using (sl.Status.ToCollection(pr))
             {
@@ -77,7 +77,7 @@ namespace UnitTests
             var mb = new MessageBus();
             var sl = new DefaultStatusListener(mb);
             var sr = new DefaultStatusReporter(mb);
-            var target = new SqliteQueryExecutionService(sr) { ConnectionString = "Data Source=:memory:" };
+            var target = new SqliteQueryExecutionService(sr, new DummySettingsStorageService()) { ConnectionString = "Data Source=:memory:" };
             var pr = new List<StatusReport>();
             using (sl.Status.ToCollection(pr))
             {
