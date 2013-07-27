@@ -21,7 +21,7 @@ namespace Theodorus2.Views
             _vm = vm;
             DataContext = vm;
             InitializeComponent();
-
+            
             using (var s = GetType().Assembly.GetManifestResourceStream("Theodorus2.Assets.SQL.xhsd"))
             {
                 if (s == null) return;

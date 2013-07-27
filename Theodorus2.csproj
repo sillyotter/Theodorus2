@@ -87,6 +87,7 @@
     <Reference Include="System.Data.SQLite.Linq">
       <HintPath>packages\System.Data.SQLite.1.0.87.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive.Core">
       <HintPath>packages\Rx-Core.2.1.30214.0\lib\Net45\System.Reactive.Core.dll</HintPath>
     </Reference>

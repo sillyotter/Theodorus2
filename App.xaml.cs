@@ -16,6 +16,7 @@ namespace Theodorus2
         public App()
         {
             Settings.Default.Upgrade();
+
             AppDomain.CurrentDomain.UnhandledException +=
                 (o, args) => Log.ErrorException("Unhandled domain exception", (Exception)args.ExceptionObject);
 

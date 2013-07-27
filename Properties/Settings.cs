@@ -10,14 +10,7 @@
         
         public Settings()
         {
-            SettingChanging += SettingChangingEventHandler;    
-        }
-        
-        private void SettingChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e)
-        {
-            Save();
-        }
-        
-       
+            PropertyChanged += (sender, args) => Save();
+        }       
     }
 }

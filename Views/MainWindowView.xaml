@@ -221,12 +221,14 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="{Binding Source={x:Static local:Settings.Default}, Path=ResultHeight, Mode=TwoWay}"/>
             </Grid.RowDefinitions>
-            <avalonedit:TextEditor x:Name="TextEditor"
+            <avalonedit:TextEditor 
+                x:Name="TextEditor"
                 Grid.Row="0"
-                FontFamily="Consolas"
-                SyntaxHighlighting="C#"
                 IsEnabled="{Binding IsConnected}"
-                FontSize="10pt" Document="{Binding Document, Mode=OneWay}"/>
+                FontFamily="{Binding Source={x:Static local:Settings.Default}, Path=Font, Mode=OneWay}"
+                FontSize="{Binding Source={x:Static local:Settings.Default}, Path=FontSize, Mode=OneWay}"
+                ShowLineNumbers="{Binding Source={x:Static local:Settings.Default}, Path=ShowLineNumbers, Mode=TwoWay}"     
+                Document="{Binding Document, Mode=OneWay}"/>
             <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="Auto" Height="5" Background="#d1d1d1" />
             <WebBrowser x:Name="Browser" Focusable="True" Grid.Row="2" IsEnabled="{Binding HasResults}"></WebBrowser>
             

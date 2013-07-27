@@ -9,6 +9,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:Theodorus2.ViewModels"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:properties="clr-namespace:Theodorus2.Properties"
         mc:Ignorable="d"    
         d:DataContext="{d:DesignInstance viewModels:OptionsDialogViewModel, IsDesignTimeCreatable=False}"
         >
@@ -20,9 +21,43 @@
         <StackPanel Grid.Row="0">
             <GroupBox Header="General" Margin="5">
                 <StackPanel>
+                    <StackPanel.Resources>
+                        <CollectionViewSource Source="{Binding Source={x:Static Fonts.SystemFontFamilies}}" x:Key="myFonts"/>
+                    </StackPanel.Resources>
                     <Label>Limit Query Results:</Label>
-                    <xctk:IntegerUpDown FormatString="N0" Increment="1" MinHeight="1" 
-                                        Value="{Binding Path=ResultsLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>                    
+                    <xctk:IntegerUpDown
+                        FormatString="N0" Increment="1" Minimum="1" 
+                        Value="{Binding Path=ResultsLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Label>Font Name:</Label>
+                    <ComboBox 
+                        HorizontalAlignment="Stretch"
+                        ItemsSource="{Binding Source={StaticResource myFonts}}"
+                        SelectedValue="{Binding Path=Font}" 
+                        SelectedValuePath="Source" 
+                        Height="23" 
+                        VerticalAlignment="Top">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" FontFamily="{Binding}" Height="20"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <Label>Font Size:</Label>
+                    <xctk:IntegerUpDown 
+                        FormatString="N0" 
+                        Increment="1" 
+                        Minimum="1" 
+                        Value="{Binding Path=FontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <CheckBox Margin="20" IsChecked="{Binding ShowLineNumbers, Mode=TwoWay}" >Show Line Numbers</CheckBox>
+                    
                 </StackPanel>
             </GroupBox>
         </StackPanel>

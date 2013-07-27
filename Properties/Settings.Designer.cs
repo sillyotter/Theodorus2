@@ -118,5 +118,41 @@ namespace Theodorus2.Properties {
                 this["ResultLimit"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowLineNumbers {
+            get {
+                return ((bool)(this["ShowLineNumbers"]));
+            }
+            set {
+                this["ShowLineNumbers"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Consolas")]
+        public string Font {
+            get {
+                return ((string)(this["Font"]));
+            }
+            set {
+                this["Font"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int FontSize {
+            get {
+                return ((int)(this["FontSize"]));
+            }
+            set {
+                this["FontSize"] = value;
+            }
+        }
     }
 }
