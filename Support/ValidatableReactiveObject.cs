@@ -11,17 +11,15 @@ using ReactiveUI;
 
 namespace Theodorus2.Support
 {
-    public abstract class ValidatableReactiveObject<TSource> : ReactiveObject, INotifyDataErrorInfo, IDisposable 
+    public abstract class ValidatableReactiveObject<TSource> : ReactiveObject, INotifyDataErrorInfo, IDisposable
     {
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
 
-        private readonly ConcurrentDictionary<string, List<Func<string>>> _validators = 
-            new ConcurrentDictionary<string, List<Func<string>>>(); 
+        private readonly ConcurrentDictionary<string, List<Func<string>>> _validators =
+            new ConcurrentDictionary<string, List<Func<string>>>();
 
-        private readonly ConcurrentDictionary<string,List<string>> _errors =
+        private readonly ConcurrentDictionary<string, List<string>> _errors =
             new ConcurrentDictionary<string, List<string>>();
-
-        //private readonly ObservableAsPropertyHelper<bool> _hasErrorsObservableAsPropertyHelper;
 
         protected void AddValidator<TValue>(Expression<Func<TSource, TValue>> selector, Func<string> validator)
         {
@@ -29,8 +27,8 @@ namespace Theodorus2.Support
 
             _validators.AddOrUpdate(
                 props,
-                s => new List<Func<string>> {validator},
-                (s, list) => new List<Func<string>>(list) {validator});
+                s => new List<Func<string>> { validator },
+                (s, list) => new List<Func<string>>(list) { validator });
 
             RunValidators(props);
         }
@@ -52,13 +50,8 @@ namespace Theodorus2.Support
                 .Publish()
                 .RefCount();
 
-            //_hasErrorsObservableAsPropertyHelper = obs.Select(_ => _errors.Any(x => x.Value.Any()))
-            //    .ToProperty(this, x => x.HasErrors);
-
             _compositeDisposable.Add(
-                obs.Subscribe(propName => OnErrorsChanged(new DataErrorsChangedEventArgs(propName))));
-
-            //_compositeDisposable.Add(_hasErrorsObservableAsPropertyHelper);
+              obs.Subscribe(propName => OnErrorsChanged(new DataErrorsChangedEventArgs(propName))));
         }
 
         public IEnumerable GetErrors(string propertyName)
@@ -71,7 +64,7 @@ namespace Theodorus2.Support
             return new String[0];
         }
 
-        public bool HasErrors 
+        public bool HasErrors
         {
             get { return _errors.Any(x => x.Value.Any()); }
         }

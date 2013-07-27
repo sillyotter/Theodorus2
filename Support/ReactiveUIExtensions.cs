@@ -9,6 +9,14 @@ using ReactiveUI;
 
 namespace Theodorus2.Support
 {
+    public static class EnumEx
+    {
+        public static Array GetDistinctValues(Type @enum)
+        {
+            return Enum.GetValues(@enum).Cast<object>().Distinct().ToArray();
+        }
+    }
+
     public static class ReactiveUIExtensions
     {
         public static void RaisePropertyChanged<TSource, TValue>(this TSource @this,

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
 using System.Threading.Tasks;
 using ReactiveUI;
 using Theodorus2.Interfaces;
@@ -65,8 +64,6 @@ namespace UnitTests
                 Assert.True(_promptingService.AboutWasShown);
                 target.OptionsCommand.Execute(null);
                 Assert.True(_promptingService.OptionWasShown);
-
-
             }
         }
     }
