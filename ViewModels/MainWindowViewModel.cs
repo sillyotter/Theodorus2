@@ -194,13 +194,13 @@ namespace Theodorus2.ViewModels
             StatusMessage = "Ready";
         }
 
-        public ICommand ExecuteCommand { get; private set; }
+        public IReactiveCommand ExecuteCommand { get; private set; }
         public ICommand ExitCommand { get; private set; }
         public ICommand AboutCommand { get; private set; }
         public ICommand OpenDatabaseCommand { get; private set; }
-        public ICommand OpenQueryCommand { get; private set; }
-        public ICommand SaveQueryCommand { get; private set; }
-        public ICommand SaveResultsCommand { get; private set; }
+        public IReactiveCommand OpenQueryCommand { get; private set; }
+        public IReactiveCommand SaveQueryCommand { get; private set; }
+        public IReactiveCommand SaveResultsCommand { get; private set; }
         public ICommand OptionsCommand { get; private set; }
      
 

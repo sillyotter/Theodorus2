@@ -44,7 +44,7 @@ namespace Theodorus2.Support
                 .RefCount();
         }
 
-        public static Task ExecuteAsync(this ReactiveCommand cmd, object parameter = null)
+        public static Task ExecuteAsync(this IReactiveCommand cmd, object parameter = null)
         {
             if (!cmd.CanExecute(parameter)) throw new InvalidOperationException("Can't Execute");
 

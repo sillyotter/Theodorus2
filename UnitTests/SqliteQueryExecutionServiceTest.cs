@@ -55,5 +55,36 @@ namespace UnitTests
             }
         }
 
+        [Fact]
+        public async Task TestExecuteWithQueryMultipleResultSets()
+        {
+            var mb = new MessageBus();
+            var sl = new DefaultStatusListener(mb);
+            var sr = new DefaultStatusReporter(mb);
+            var target = new SqliteQueryExecutionService(sr) { ConnectionString = "Data Source=:memory:" };
+            var pr = new List<StatusReport>();
+            using (sl.Status.ToCollection(pr))
+            {
+                var res = await target.Execute("select 1; select 2;");
+                Assert.Equal(1,res.Count());
+                Assert.Equal(2, res.First().Results.Tables.Count);
+            }
+        }
+
+        [Fact]
+        public async Task TestExecuteWithQueryMultipleStatements()
+        {
+            var mb = new MessageBus();
+            var sl = new DefaultStatusListener(mb);
+            var sr = new DefaultStatusReporter(mb);
+            var target = new SqliteQueryExecutionService(sr) { ConnectionString = "Data Source=:memory:" };
+            var pr = new List<StatusReport>();
+            using (sl.Status.ToCollection(pr))
+            {
+                var res = await target.Execute("select 1;\ngo;\nselect 2;");
+                Assert.Equal(2, res.Count());
+                Assert.Equal(1, res.First().Results.Tables.Count);
+            }
+        }
     }
 }

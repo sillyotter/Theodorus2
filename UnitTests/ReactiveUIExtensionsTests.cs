@@ -64,7 +64,7 @@ namespace UnitTests
             Assert.Equal(1, count);
 
             sw.Stop();
-            Assert.InRange(sw.ElapsedMilliseconds, 950, 1050);
+            Assert.InRange(sw.ElapsedMilliseconds, 950, 1100);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace UnitTests
             await cmd.ExecuteAsync();
             Assert.Equal(1, count);
             sw.Stop();
-            Assert.InRange( sw.ElapsedMilliseconds, 0, 40);
+            Assert.InRange( sw.ElapsedMilliseconds, 0, 60);
         }
 
         [Fact]

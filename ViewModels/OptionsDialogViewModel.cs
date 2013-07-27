@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Input;
+using Microsoft.Win32;
 using ReactiveUI;
 using Theodorus2.Properties;
 using Theodorus2.Support;
@@ -18,9 +19,11 @@ namespace Theodorus2.ViewModels
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
         public OptionsDialogViewModel()
         {
-            AddValidator(x => x.ResultsLimit, () => ResultsLimit <= 0 ? "Result limit must be greater than 0" : null);
+            _resultLimit = Settings.Default.ResultLimit;
 
-            var okCmd = new ReactiveCommand(HasErrorsObservable.Select(x => !x));
+            AddValidator(x => x.ResultsLimit, () => _resultLimit <= 0 ? "Result limit must be greater than 0" : null);
+
+            var okCmd = new ReactiveCommand(this.WhenAny(x => x.HasErrors, x => !x.GetValue()));
             _compositeDisposable.Add(okCmd);
             OkCommand = okCmd;
 
@@ -34,6 +37,10 @@ namespace Theodorus2.ViewModels
                     _result.OnNext(x);
                     _result.OnCompleted();
                 }));
+            _compositeDisposable.Add(
+                okCmd.Subscribe(x => Save())
+                );
+
         }
         
         public IObservable<bool> Results
@@ -41,14 +48,18 @@ namespace Theodorus2.ViewModels
             get { return _result; }
         }
 
+        private int _resultLimit;
+
         public int ResultsLimit
         {
-            get { return Settings.Default.ResultLimit; }
-            set
-            {
-                Settings.Default.ResultLimit = value;
-                Settings.Default.Save();
-            }
+            get { return _resultLimit; }
+            set { this.RaiseAndSetIfChanged(ref _resultLimit, value); }
+        }
+
+        private void Save()
+        {
+            Settings.Default.ResultLimit = _resultLimit;
+            Settings.Default.Save();
         }
 
         public ICommand CancelCommand { get; private set; }

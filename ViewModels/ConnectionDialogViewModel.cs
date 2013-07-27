@@ -36,18 +36,7 @@ namespace Theodorus2.ViewModels
 
         public ConnectionDialogViewModel(IFileSelectionService fileSelectionService)
         {
-            _compositeDisposable.Add(
-                Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
-                    handler => PropertyChanged += handler, handler => PropertyChanged -= handler)
-                    .Where(e => e.EventArgs.PropertyName != "ConnectionString")
-                    .Subscribe(x => this.RaisePropertyChanged(i => i.ConnectionString)));
-
-            AddValidator(x => x.DataSource, () => EnsureGoodDataSource(this));
-            AddValidator(x => x.CacheSize, () => EnsurePositiveInteger(CacheSize));
-            AddValidator(x => x.DefaultTimeout, () => EnsurePositiveInteger(DefaultTimeout));
-            AddValidator(x => x.MaxPageCount, () =>EnsurePositiveInteger(MaxPageCount));
-            AddValidator(x => x.PageSize, () => EnsurePositiveInteger(PageSize) ?? EnsurePowerOfTwo(PageSize));
-
+              
             _builder.BinaryGUID = true;
             _builder.CacheSize = 4096;
             _builder.DateTimeFormat = SQLiteDateFormats.ISO8601; 
@@ -66,6 +55,18 @@ namespace Theodorus2.ViewModels
             _builder.SyncMode = SynchronizationModes.Normal;
             _builder.Version = 3;
 
+            _compositeDisposable.Add(
+                Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+                    handler => PropertyChanged += handler, handler => PropertyChanged -= handler)
+                    .Where(e => e.EventArgs.PropertyName != "ConnectionString" && e.EventArgs.PropertyName != "HasErrors")
+                    .Subscribe(x => this.RaisePropertyChanged(i => i.ConnectionString)));
+
+            AddValidator(x => x.DataSource, () => EnsureGoodDataSource(this));
+            AddValidator(x => x.CacheSize, () => EnsurePositiveInteger(CacheSize));
+            AddValidator(x => x.DefaultTimeout, () => EnsurePositiveInteger(DefaultTimeout));
+            AddValidator(x => x.MaxPageCount, () => EnsurePositiveInteger(MaxPageCount));
+            AddValidator(x => x.PageSize, () => EnsurePositiveInteger(PageSize) ?? EnsurePowerOfTwo(PageSize));
+
             var browseCommand = new ReactiveCommand();
             _compositeDisposable.Add(
                 browseCommand.Subscribe(x =>
@@ -75,7 +76,7 @@ namespace Theodorus2.ViewModels
                 }));
             BrowseCommand = browseCommand;
 
-            var okCommand = new ReactiveCommand(HasErrorsObservable.Select(x => !x));
+            var okCommand = new ReactiveCommand(this.WhenAny(x => x.HasErrors, x => !x.GetValue()));
             _compositeDisposable.Add(okCommand);
             OkCommand = okCommand;
 

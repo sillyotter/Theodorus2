@@ -21,7 +21,7 @@ namespace Theodorus2.Support
         private readonly ConcurrentDictionary<string,List<string>> _errors =
             new ConcurrentDictionary<string, List<string>>();
 
-        private readonly ObservableAsPropertyHelper<bool> _hasErrorsObservableAsPropertyHelper;
+        //private readonly ObservableAsPropertyHelper<bool> _hasErrorsObservableAsPropertyHelper;
 
         protected void AddValidator<TValue>(Expression<Func<TSource, TValue>> selector, Func<string> validator)
         {
@@ -39,34 +39,26 @@ namespace Theodorus2.Support
         {
             var errors = _validators.GetOrAdd(propName, new List<Func<string>>()).Select(v => v());
             _errors[propName] = errors.Where(i => i != null).ToList();
+            this.RaisePropertyChanged(x => x.HasErrors);
         }
 
         protected ValidatableReactiveObject()
         {
             var obs = Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
                 handler => PropertyChanged += handler, handler => PropertyChanged -= handler)
-                .ObserveOn(RxApp.TaskpoolScheduler)
                 .Select(@event => @event.EventArgs.PropertyName)
+                .Where(x => x != "HasErrors")
                 .Do(RunValidators)
                 .Publish()
                 .RefCount();
 
-            _hasErrorsObservableAsPropertyHelper = obs.Select(_ => _errors.Any(x => x.Value.Any()))
-                .ToProperty(this, x => x.HasErrors, false, RxApp.MainThreadScheduler);
+            //_hasErrorsObservableAsPropertyHelper = obs.Select(_ => _errors.Any(x => x.Value.Any()))
+            //    .ToProperty(this, x => x.HasErrors);
 
             _compositeDisposable.Add(
-                obs.ObserveOn(RxApp.MainThreadScheduler)
-                    .Subscribe(propName => OnErrorsChanged(new DataErrorsChangedEventArgs(propName))));
+                obs.Subscribe(propName => OnErrorsChanged(new DataErrorsChangedEventArgs(propName))));
 
-            _compositeDisposable.Add(_hasErrorsObservableAsPropertyHelper);
-        }
-
-        protected IObservable<bool> HasErrorsObservable
-        {
-            get
-            {
-                return _hasErrorsObservableAsPropertyHelper;
-            }
+            //_compositeDisposable.Add(_hasErrorsObservableAsPropertyHelper);
         }
 
         public IEnumerable GetErrors(string propertyName)
@@ -79,7 +71,8 @@ namespace Theodorus2.Support
             return new String[0];
         }
 
-        public bool HasErrors {
+        public bool HasErrors 
+        {
             get { return _errors.Any(x => x.Value.Any()); }
         }
 

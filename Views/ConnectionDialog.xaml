@@ -136,36 +136,40 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+                    
                     <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Cache Size (pages)</TextBlock>
-                    <TextBox Grid.Column="1" Grid.Row="0" >
-                        <TextBox.Text>
-                            <Binding Path="CacheSize" Mode="TwoWay"  UpdateSourceTrigger="PropertyChanged" ValidatesOnNotifyDataErrors="True" >
-                               
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="0" FormatString="N0" Increment="1" MinHeight="1" 
+                                        Value="{Binding Path=CacheSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
+                    
                     <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">DateTime Format</TextBlock>
                     <ComboBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch"
 								ItemsSource="{Binding Source={StaticResource SQLiteDateFormats}}" 
 							  SelectedItem="{Binding Path=DateTimeFormat,Mode=TwoWay}" />
+                    
                     <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Default Isolation Level</TextBlock>
                     <ComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Source={StaticResource IsolationLevel}}" 
 							  SelectedItem="{Binding Path=DefaultIsolationLevel,Mode=TwoWay}"/>
+                    
                     <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">Journal Mode</TextBlock>
                     <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Source={StaticResource JournalMode}}" 
 							  SelectedItem="{Binding Path=JournalMode,Mode=TwoWay}"/>
+                    
                     <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Sync Mode</TextBlock>
                     <ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Source={StaticResource SyncMode}}" 
 							  SelectedItem="{Binding Path=SyncMode,Mode=TwoWay}"/>
+                    
                     <TextBlock Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Default Timeout (sec)</TextBlock>
                     <xctk:IntegerUpDown Grid.Column="1" Grid.Row="5" FormatString="N0" Increment="1" MinHeight="1" 
                                         Value="{Binding Path=DefaultTimeout, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
+                    
                     <TextBlock Grid.Column="0" Grid.Row="6" VerticalAlignment="Center">Max Page Count</TextBlock>
                     <xctk:IntegerUpDown Grid.Column="1" Grid.Row="6" FormatString="N0" Increment="1" MinHeight="1" 
                                         Value="{Binding Path=MaxPageCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
+                    
                     <TextBlock Grid.Column="0" Grid.Row="7" VerticalAlignment="Center">Page Size (bytes)</TextBlock>
                     <xctk:IntegerUpDown Grid.Column="1" Grid.Row="7" FormatString="N0" Increment="1" MinHeight="1" 
                                         Value="{Binding Path=PageSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
+                
                 </Grid>
             </GroupBox>
             <GroupBox Header="Options" >

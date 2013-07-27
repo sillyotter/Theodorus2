@@ -21,7 +21,8 @@
             <GroupBox Header="General" Margin="5">
                 <StackPanel>
                     <Label>Limit Query Results:</Label>
-                    <xctk:IntegerUpDown FormatString="N0" Increment="1" MinHeight="1" Value="{Binding Path=ResultsLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>                    
+                    <xctk:IntegerUpDown FormatString="N0" Increment="1" MinHeight="1" 
+                                        Value="{Binding Path=ResultsLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>                    
                 </StackPanel>
             </GroupBox>
         </StackPanel>
