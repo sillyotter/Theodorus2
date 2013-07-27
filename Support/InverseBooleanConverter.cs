@@ -6,7 +6,7 @@ using System.Windows.Markup;
 namespace Theodorus2.Support
 {
     [ValueConversion(typeof(bool), typeof(bool))]
-    class InverseBooleanConverter : MarkupExtension, IValueConverter
+    public class InverseBooleanConverter : MarkupExtension, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

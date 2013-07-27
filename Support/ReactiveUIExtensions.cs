@@ -9,7 +9,7 @@ using ReactiveUI;
 
 namespace Theodorus2.Support
 {
-    static class ReactiveUIExtensions
+    public static class ReactiveUIExtensions
     {
         public static void RaisePropertyChanged<TSource, TValue>(this TSource @this,
             params Expression<Func<TSource, TValue>>[] selectors) where TSource: ReactiveObject

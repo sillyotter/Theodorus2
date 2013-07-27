@@ -2,7 +2,7 @@
 
 namespace Theodorus2.Interfaces
 {
-    interface IStatusReporter
+    public interface IStatusReporter
     {
         IDisposable BeginMonitoredWork(string message);
         IDisposable BeginIndeterminateWork(string message);

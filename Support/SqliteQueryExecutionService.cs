@@ -12,7 +12,7 @@ using Theodorus2.Properties;
 
 namespace Theodorus2.Support
 {
-    class SqliteQueryExecutionService : IQueryExecutionService
+    public class SqliteQueryExecutionService : IQueryExecutionService
     {
         private readonly IStatusReporter _reporter;
         private static readonly Regex Cleaner = new Regex(@"(--.*$|/\*[^*]*?\*/)", RegexOptions.Compiled|RegexOptions.Multiline);
