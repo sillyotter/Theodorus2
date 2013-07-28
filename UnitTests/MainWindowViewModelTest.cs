@@ -121,7 +121,7 @@ namespace UnitTests
 
     internal class DummyResultRenderer : IResultRenderer 
     {
-        public Task<string> RenderResults(IEnumerable<IQueryResult> input)
+        public Task<string> RenderResults(IEnumerable<IQueryResult> resultSets)
         {
             return Task.FromResult("ASDF");
         }

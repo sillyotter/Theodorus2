@@ -35,5 +35,93 @@
     <Setting Name="FontSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
+    <Setting Name="ResultStyle" Type="System.String" Scope="User">
+      <Value Profile="(Default)">
+    body {
+        font-family: ""Consolas"", monospace;
+        font-size: 14px;
+    }
+
+    .resultset {
+        margin-left: 1em;
+        margin-right: 1em;
+        margin-bottom: 1em;
+        border-bottom: 2px solid black;
+    }
+
+    .query {
+        background: #DDD;
+        margin: 0 auto;
+        border: 1px solid black;
+        padding: 4px;
+        margin-bottom: 1em;
+        white-space: pre;
+    }
+
+    .duration {
+        float: right;
+        margin-top: -2.5em;
+        margin-right: 2em;
+    }
+
+    .duration:after {
+        content: "" ms"";
+    }
+
+    .duration:before {
+        content: ""Execution time: "";
+    }
+
+    .error {
+        color: Red;
+    }
+			
+    .error, .message {
+        margin-left: 2em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+					
+    table {
+        margin-bottom: 1em;
+        margin-left: 2em;
+        border-collapse: collapse;
+        border-style: solid;
+        border-color: black;
+        border-width: 1px;
+        clear: both;
+        width: auto;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #EEE;
+    }
+
+    table tr:hover {
+        background-color: #BBB;
+    }
+
+			
+    table thead, table tfoot {
+        border-bottom-style: solid;
+        border-bottom-color: black;
+        border-bottom-width: 1px;
+        background-color: #CCC;
+        font-weight: bold;
+    }
+
+    table td {
+        border-width: 1px;
+        border-left-style: solid;
+        border-right-style: solid;
+        border-left-color: black;
+        border-right-color: black;
+        padding-left: 1em;
+        padding-right: 1em;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

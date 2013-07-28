@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Input;
+using ICSharpCode.AvalonEdit.Document;
 using ReactiveUI;
 using Theodorus2.Interfaces;
 using Theodorus2.Support;
@@ -18,7 +19,7 @@ namespace Theodorus2.ViewModels
         private int _fontSize;
         private string _font;
         private bool _showLineNumbers;
-
+        private readonly TextDocument _styleDoc = new TextDocument();
 
         public OptionsDialogViewModel(ISettingsStorageService srv)
         {
@@ -28,6 +29,7 @@ namespace Theodorus2.ViewModels
             _resultLimit = _srv.GetValue<int>("ResultLimit");
             _fontSize = _srv.GetValue<int>("FontSize");
             _font = _srv.GetValue<string>("Font");
+            _styleDoc.Text = _srv.GetValue<string>("ResultStyle");
 
             AddValidator(x => x.ResultsLimit, () => _resultLimit <= 0 ? "Result limit must be greater than 0" : null);
 
@@ -48,21 +50,18 @@ namespace Theodorus2.ViewModels
             _compositeDisposable.Add(
                 okCmd.Subscribe(x => Save())
                 );
-
         }
         
         public IObservable<bool> Results
         {
             get { return _result; }
         }
-
        
         public int ResultsLimit
         {
             get { return _resultLimit; }
             set { this.RaiseAndSetIfChanged(ref _resultLimit, value); }
         }
-
         
         public int FontSize
         {
@@ -82,12 +81,18 @@ namespace Theodorus2.ViewModels
             set { this.RaiseAndSetIfChanged(ref _showLineNumbers, value); }
         }
 
+        public TextDocument StyleDoc
+        {
+            get { return _styleDoc; }
+        }
+
         private void Save()
         {
             _srv.SetValue("Font", _font);
             _srv.SetValue("ResultLimit", _resultLimit);
             _srv.SetValue("FontSize",_fontSize);
             _srv.SetValue("ShowLineNumbers", _showLineNumbers);
+            _srv.SetValue("ResultStyle", _styleDoc.Text);
         }
 
         public ICommand CancelCommand { get; private set; }

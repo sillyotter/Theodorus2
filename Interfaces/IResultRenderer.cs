@@ -5,6 +5,6 @@ namespace Theodorus2.Interfaces
 {
     public interface IResultRenderer
     {
-        Task<string> RenderResults(IEnumerable<IQueryResult> input);
+        Task<string> RenderResults(IEnumerable<IQueryResult> resultSets);
     }
 }
