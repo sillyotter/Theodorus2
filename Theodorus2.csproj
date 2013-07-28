@@ -175,6 +175,7 @@
     <Compile Include="Interfaces\IStatusListener.cs" />
     <Compile Include="Interfaces\IStatusReporter.cs" />
     <Compile Include="Interfaces\IQueryResult.cs" />
+    <Compile Include="Support\HyperlinkExtensions.cs" />
     <Compile Include="Support\SqliteQueryExecutionService.cs" />
     <Compile Include="Support\QueryResult.cs" />
     <Compile Include="Support\StatusReport.cs" />
