@@ -146,7 +146,6 @@
     <Compile Include="SqliteExtensions\Median.cs" />
     <Compile Include="SqliteExtensions\Replace.cs" />
     <Compile Include="SqliteExtensions\Skew.cs" />
-    <Compile Include="SqliteExtensions\SkewPop.cs" />
     <Compile Include="SqliteExtensions\StdDevPop.cs" />
     <Compile Include="SqliteExtensions\StdDevSamp.cs" />
     <Compile Include="SqliteExtensions\VarianceHelper.cs" />

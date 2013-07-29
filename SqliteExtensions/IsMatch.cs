@@ -20,20 +20,18 @@ namespace Theodorus2.SqliteExtensions
 				if (String.IsNullOrEmpty(col)) return null;
 				if (String.IsNullOrEmpty(exp)) return new ArgumentException("Can't match a null regexp");
 
-				RegexOptions options = RegexOptions.None;
-				if (!String.IsNullOrEmpty(opt))
-				{
-					foreach(var item in opt.Split('|'))
-					{
-						RegexOptions res;
-						if(Enum.TryParse(item, true, out res))
-						{
-							options |= res;
-						}
-					}
-				}
+				var options = RegexOptions.None;
+			    if (String.IsNullOrEmpty(opt)) return Regex.IsMatch(col, exp, options);
+			    foreach(var item in opt.Split('|'))
+			    {
+			        RegexOptions res;
+			        if(Enum.TryParse(item, true, out res))
+			        {
+			            options |= res;
+			        }
+			    }
 
-				return Regex.IsMatch(col, exp, options);
+			    return Regex.IsMatch(col, exp, options);
 			}
 			catch (Exception e)
 			{

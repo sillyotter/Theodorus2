@@ -21,7 +21,7 @@ namespace Theodorus2.SqliteExtensions
 			var sum2 = newData.Item3;
 			var sum12 = newData.Item4;
 
-			return (sum12 - (sum1*sum2)/n)/n;
+			return (sum12 - sum1*sum2/n)/n;
 		}
 	}
 }

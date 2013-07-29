@@ -25,7 +25,8 @@ namespace Theodorus2.SqliteExtensions
 					using (var gs = new GZipStream(ms, CompressionMode.Decompress, true))
 					{
 						var decompBuf = new byte[len];
-						return gs.Read(decompBuf, 0, len);
+						gs.Read(decompBuf, 0, len); // TODO: really ought to make sure that it read the whole thing...
+					    return decompBuf;
 					}
 				}
 			}

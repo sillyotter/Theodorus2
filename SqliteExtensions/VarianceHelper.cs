@@ -63,5 +63,31 @@ namespace Theodorus2.SqliteExtensions
 			contextData = Tuple.Create(n + 1, sum1, sum2, sum3);
 		}
 
+	    public static void SnKStep(object[] args, int stepNumber, ref object contextData)
+	    {
+            dynamic xi = args[0];
+            var newData = contextData as Tuple<int, double, double, double, double> ?? Tuple.Create(0, 0.0, 0.0, 0.0, 0.0);
+            var n = newData.Item1;
+            var mean = newData.Item2;
+            var variance = newData.Item3;
+            var skewness = newData.Item4;
+            var kurtosis = newData.Item5;
+
+            double delta = xi - mean;
+            var scaleDelta = delta / ++n;
+            var scaleDeltaSqr = scaleDelta * scaleDelta;
+            var tmpDelta = delta * (n - 1);
+
+            mean += scaleDelta;
+
+            kurtosis += tmpDelta * scaleDelta * scaleDeltaSqr * (n * n - 3 * n + 3)
+                + 6 * scaleDeltaSqr * variance - 4 * scaleDelta * skewness;
+
+            skewness += tmpDelta * scaleDeltaSqr * (n - 2) - 3 * scaleDelta * variance;
+            variance += tmpDelta * scaleDelta;
+
+            contextData = Tuple.Create(n, mean, variance, skewness, kurtosis);
+	    }
+
 	}
 }
