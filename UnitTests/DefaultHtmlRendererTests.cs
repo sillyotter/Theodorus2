@@ -2,11 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Theodorus2.Interfaces;
 using Theodorus2.Support;
 using Xunit;
 
 namespace UnitTests
 {
+    
+
     public class DefaultHtmlRendererTests
     {
         private readonly XNamespace _ns = "http://www.w3.org/1999/xhtml";
@@ -14,7 +17,7 @@ namespace UnitTests
         [Fact]
         public async Task EmptyResultsTest()
         {
-            var r = new DefaultHtmlRenderer();
+            var r = new DefaultHtmlRenderer( new DummySettingsStorageService());
 
             var result = await r.RenderResults(new QueryResult[] {});
             var presult = XDocument.Parse(result);
@@ -24,27 +27,19 @@ namespace UnitTests
         [Fact]
         public async Task SingleResultTest()
         {
-            var r = new DefaultHtmlRenderer();
+            var r = new DefaultHtmlRenderer(new DummySettingsStorageService());
 
             var result = await r.RenderResults(new[] { new QueryResult("asdf", 100, new DataSet()) });
             var presult = XDocument.Parse(result);
-            Assert.Equal(1, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "answer"));
-            Assert.Equal(1, presult.Descendants(_ns + "h3").Count(x => x.Attribute("class").Value == "queryheader"));
-            Assert.Equal(1, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "result"));
-            Assert.Equal("asdf", presult.Descendants(_ns + "div")
-                .Where(x => x.Attribute("class").Value == "result")
-                .Descendants(_ns + "pre").First().Value);
-            Assert.Equal("OK", presult.Descendants(_ns + "div")
-                .Where(x => x.Attribute("class").Value == "result")
-                .Descendants(_ns + "pre")
-                .Skip(1).First()
-                .Value);
+            Assert.Equal(1, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "resultset"));
+            Assert.Equal(1, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "query"));
+            Assert.Equal(1, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "duration"));
         }
 
         [Fact]
         public async Task SingleResultWithDataTest()
         {
-            var r = new DefaultHtmlRenderer();
+            var r = new DefaultHtmlRenderer(new DummySettingsStorageService());
             var ds = new DataSet();
             ds.Tables.Add(new DataTable("ASDF"));
 
@@ -56,7 +51,7 @@ namespace UnitTests
         [Fact]
         public async Task SingleResultWithRealValues()
         {
-            var r = new DefaultHtmlRenderer();
+            var r = new DefaultHtmlRenderer(new DummySettingsStorageService());
             var ds = new DataSet();
             var dt = new DataTable("ASDF");
             dt.Columns.Add("ASDF");
@@ -79,7 +74,7 @@ namespace UnitTests
         [Fact]
         public async Task TwoTablesOneDataSetResultWithRealValues()
         {
-            var r = new DefaultHtmlRenderer();
+            var r = new DefaultHtmlRenderer(new DummySettingsStorageService());
             var ds = new DataSet();
             var dt = new DataTable("ASDF");
             dt.Columns.Add("ASDF");
@@ -106,23 +101,15 @@ namespace UnitTests
             Assert.Equal(2*5, presult.Descendants(_ns + "tr").Count());
             Assert.Equal(2*15, presult.Descendants(_ns + "td").Count());
 
-            Assert.Equal(1, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "answer"));
-            Assert.Equal(1, presult.Descendants(_ns + "h3").Count(x => x.Attribute("class").Value == "queryheader"));
-            Assert.Equal(1, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "result"));
-            Assert.Equal("asdf", presult.Descendants(_ns + "div")
-                .Where(x => x.Attribute("class").Value == "result")
-                .Descendants(_ns + "pre").First().Value);
-            Assert.Equal("OK", presult.Descendants(_ns + "div")
-                .Where(x => x.Attribute("class").Value == "result")
-                .Descendants(_ns + "pre")
-                .Skip(1).First()
-                .Value);
+            Assert.Equal(1, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "resultset"));
+            Assert.Equal(1, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "query"));
+            Assert.Equal(1, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "duration"));
         }
 
         [Fact]
         public async Task TwoTablesTwoDataSetResultWithRealValues()
         {
-            var r = new DefaultHtmlRenderer();
+            var r = new DefaultHtmlRenderer(new DummySettingsStorageService());
             var ds = new DataSet();
             var dt = new DataTable("ASDF");
             dt.Columns.Add("ASDF");
@@ -149,20 +136,10 @@ namespace UnitTests
             Assert.Equal(4 * 5, presult.Descendants(_ns + "tr").Count());
             Assert.Equal(4 * 15, presult.Descendants(_ns + "td").Count());
 
-            Assert.Equal(2, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "answer"));
-            Assert.Equal(2, presult.Descendants(_ns + "h3").Count(x => x.Attribute("class").Value == "queryheader"));
-            Assert.Equal(2, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "result"));
-            Assert.Equal("asdf", presult.Descendants(_ns + "div")
-                .Where(x => x.Attribute("class").Value == "result")
-                .Descendants(_ns + "pre").First().Value);
-            Assert.Equal("ERTER", presult.Descendants(_ns + "div")
-                .Where(x => x.Attribute("class").Value == "result")
-                .Descendants(_ns + "pre").Skip(2).First().Value);
-            Assert.Equal("OK", presult.Descendants(_ns + "div")
-                .Where(x => x.Attribute("class").Value == "result")
-                .Descendants(_ns + "pre")
-                .Skip(3).First()
-                .Value);
+            Assert.Equal(2, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "resultset"));
+            Assert.Equal(2, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "query"));
+            Assert.Equal(2, presult.Descendants(_ns + "div").Count(x => x.Attribute("class").Value == "duration"));
+        
         }
     }
 }

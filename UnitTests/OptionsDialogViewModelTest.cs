@@ -90,7 +90,11 @@ namespace UnitTests
 
         public DummySettingsStorageService()
         {
-            _storage["ResultLimit"] = 1000;
+            _storage["ShowLineNumbers"] = false;
+            _storage["ResultLimit"] = 100;
+            _storage["FontSize"] = 13;
+            _storage["Font"] = "Consolas";
+            _storage["ResultStyle"] = "ASDF";
         }
 
         public T GetValue<T>(string key)

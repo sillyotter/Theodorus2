@@ -15,12 +15,18 @@ namespace Theodorus2.Support
         {
             obj.SetValue(IsExternalProperty, value);
         }
+
         public static readonly DependencyProperty IsExternalProperty =
-            DependencyProperty.RegisterAttached("IsExternal", typeof(bool), typeof(HyperlinkExtensions), new UIPropertyMetadata(false, OnIsExternalChanged));
+            DependencyProperty.RegisterAttached(
+                "IsExternal",
+                typeof (bool),
+                typeof (HyperlinkExtensions),
+                new UIPropertyMetadata(false, OnIsExternalChanged));
 
         private static void OnIsExternalChanged(object sender, DependencyPropertyChangedEventArgs args)
         {
             var hyperlink = sender as Hyperlink;
+            if (hyperlink == null) return;
 
             if ((bool)args.NewValue)
                 hyperlink.RequestNavigate += Hyperlink_RequestNavigate;

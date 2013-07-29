@@ -10,6 +10,7 @@ using Xunit;
 
 namespace UnitTests
 {
+#pragma warning disable 4014
     public class ReactiveUIExtensionsTests
     {
         [Fact]
@@ -217,4 +218,6 @@ namespace UnitTests
         }
 
     }
+#pragma warning restore 4014
+
 }
