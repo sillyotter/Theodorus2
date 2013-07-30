@@ -157,34 +157,46 @@ namespace Theodorus2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\r\n    body {\r\n        font-family: \"Consolas\", monospace;\r\n        font-size: 1" +
-            "4px;\r\n    }\r\n\r\n    .resultset {\r\n        margin-left: 1em;\r\n        margin-right" +
-            ": 1em;\r\n        margin-bottom: 1em;\r\n        border-bottom: 2px solid black;\r\n  " +
-            "  }\r\n\r\n    .query {\r\n        background: #DDD;\r\n        margin: 0 auto;\r\n       " +
-            " border: 1px solid black;\r\n        padding: 4px;\r\n        margin-bottom: 1em;\r\n " +
-            "       white-space: pre;\r\n    }\r\n\r\n    .duration {\r\n        float: right;\r\n     " +
-            "   margin-top: -2.5em;\r\n        margin-right: 2em;\r\n    }\r\n\r\n    .duration:after" +
-            " {\r\n        content: \" ms\";\r\n    }\r\n\r\n    .duration:before {\r\n        content:" +
-            " \"Execution time: \";\r\n    }\r\n\r\n    .error {\r\n        color: Red;\r\n    }\r\n\t\t\t\r\n" +
-            "    .error, .message {\r\n        margin-left: 2em;\r\n        margin-top: 1em;\r\n   " +
-            "     margin-bottom: 1em;\r\n    }\r\n\t\t\t\t\t\r\n    table {\r\n        margin-bottom: 1em;" +
-            "\r\n        margin-left: 2em;\r\n        border-collapse: collapse;\r\n        border-" +
-            "style: solid;\r\n        border-color: black;\r\n        border-width: 1px;\r\n       " +
-            " clear: both;\r\n        width: auto;\r\n    }\r\n\r\n    table tr:nth-child(even) {\r\n  " +
-            "      background-color: #EEE;\r\n    }\r\n\r\n    table tr:hover {\r\n        background" +
-            "-color: #BBB;\r\n    }\r\n\r\n\t\t\t\r\n    table thead, table tfoot {\r\n        border-bott" +
-            "om-style: solid;\r\n        border-bottom-color: black;\r\n        border-bottom-wid" +
-            "th: 1px;\r\n        background-color: #CCC;\r\n        font-weight: bold;\r\n    }\r\n\r\n" +
-            "    table td {\r\n        border-width: 1px;\r\n        border-left-style: solid;\r\n " +
-            "       border-right-style: solid;\r\n        border-left-color: black;\r\n        bo" +
-            "rder-right-color: black;\r\n        padding-left: 1em;\r\n        padding-right: 1em" +
-            ";\r\n        padding-top: 2px;\r\n        padding-bottom: 2px;\r\n    }\r\n")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\r\n    body {\r\n        font-family: \"Consolas\", monospace;\r\n        font-size: 14p" +
+            "x;\r\n    }\r\n\r\n    .resultset {\r\n        margin-left: 1em;\r\n        margin-right: " +
+            "1em;\r\n        margin-bottom: 1em;\r\n        border-bottom: 2px solid black;\r\n    " +
+            "}\r\n\r\n    .query {\r\n        background: #DDD;\r\n        margin: 0 auto;\r\n        b" +
+            "order: 1px solid black;\r\n        padding: 4px;\r\n        margin-bottom: 1em;\r\n   " +
+            "     white-space: pre;\r\n    }\r\n\r\n    .duration {\r\n        float: right;\r\n       " +
+            " margin-top: -2.5em;\r\n        margin-right: 2em;\r\n    }\r\n\r\n    .duration:after {" +
+            "\r\n        content: \" ms\";\r\n    }\r\n\r\n    .duration:before {\r\n        content: \"Ex" +
+            "ecution time: \";\r\n    }\r\n\r\n    .error {\r\n        color: Red;\r\n    }\r\n\t\t\t\r\n    .e" +
+            "rror, .message {\r\n        margin-left: 2em;\r\n        margin-top: 1em;\r\n        m" +
+            "argin-bottom: 1em;\r\n    }\r\n\t\t\t\t\t\r\n    table {\r\n        margin-bottom: 1em;\r\n    " +
+            "    margin-left: 2em;\r\n        border-collapse: collapse;\r\n        border-style:" +
+            " solid;\r\n        border-color: black;\r\n        border-width: 1px;\r\n        clear" +
+            ": both;\r\n        width: auto;\r\n    }\r\n\r\n    table tr:nth-child(even) {\r\n        " +
+            "background-color: #EEE;\r\n    }\r\n\r\n    table tr:hover {\r\n        background-color" +
+            ": #BBB;\r\n    }\r\n\r\n\t\t\t\r\n    table thead, table tfoot {\r\n        border-bottom-sty" +
+            "le: solid;\r\n        border-bottom-color: black;\r\n        border-bottom-width: 1p" +
+            "x;\r\n        background-color: #CCC;\r\n        font-weight: bold;\r\n    }\r\n\r\n    ta" +
+            "ble td {\r\n        border-width: 1px;\r\n        border-left-style: solid;\r\n       " +
+            " border-right-style: solid;\r\n        border-left-color: black;\r\n        border-r" +
+            "ight-color: black;\r\n        padding-left: 1em;\r\n        padding-right: 1em;\r\n   " +
+            "     padding-top: 2px;\r\n        padding-bottom: 2px;\r\n    }\r\n")]
         public string ResultStyle {
             get {
                 return ((string)(this["ResultStyle"]));
             }
             set {
                 this["ResultStyle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"binaryguid=True;cache size=4096;datetimeformat=ISO8601;datetimeformatstring=o;datetimekind=Utc;default isolationlevel=ReadCommitted;default timeout=30;failifmissing=False;useutf16encoding=False;flags=Default;foreign keys=True;journal mode=Default;legacy format=False;page size=16384;read only=False;synchronous=Normal;version=3")]
+        public string DefaultConnectionString {
+            get {
+                return ((string)(this["DefaultConnectionString"]));
+            }
+            set {
+                this["DefaultConnectionString"] = value;
             }
         }
     }

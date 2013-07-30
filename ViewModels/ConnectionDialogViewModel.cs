@@ -14,6 +14,7 @@ namespace Theodorus2.ViewModels
 {
     public class ConnectionDialogViewModel : ValidatableReactiveObject<ConnectionDialogViewModel>
     {
+        private readonly ISettingsStorageService _settings;
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
         private readonly SQLiteConnectionStringBuilder _builder = new SQLiteConnectionStringBuilder();
         private readonly Subject<bool> _result = new Subject<bool>();
@@ -34,26 +35,35 @@ namespace Theodorus2.ViewModels
             return (val & (val - 1)) != 0 ? "Value must be a power of two" : null;
         }
 
-        public ConnectionDialogViewModel(IFileSelectionService fileSelectionService)
+        public ConnectionDialogViewModel(IFileSelectionService fileSelectionService, ISettingsStorageService settings)
         {
-              
-            _builder.BinaryGUID = true;
-            _builder.CacheSize = 4096;
-            _builder.DateTimeFormat = SQLiteDateFormats.ISO8601; 
-            _builder.DateTimeFormatString = "o";
-            _builder.DateTimeKind = DateTimeKind.Utc;
-            _builder.DefaultIsolationLevel = IsolationLevel.ReadCommitted;
-            _builder.DefaultTimeout = 30;
-            _builder.FailIfMissing = false;
-            _builder.UseUTF16Encoding = false;
-            _builder.Flags = SQLiteConnectionFlags.Default;
-            _builder.ForeignKeys = true;
-            _builder.JournalMode = SQLiteJournalModeEnum.Default;
-            _builder.LegacyFormat = false;
-            _builder.PageSize = 16*1024;
-            _builder.ReadOnly = false;
-            _builder.SyncMode = SynchronizationModes.Normal;
-            _builder.Version = 3;
+            _settings = settings;
+
+            string defaultConStr;
+            if (settings.TryGetValue("DefaultConnectionString", out defaultConStr))
+            {
+                _builder.ConnectionString = defaultConStr;
+            }
+            else
+            {
+                _builder.BinaryGUID = true;
+                _builder.CacheSize = 4096;
+                _builder.DateTimeFormat = SQLiteDateFormats.ISO8601;
+                _builder.DateTimeFormatString = "o";
+                _builder.DateTimeKind = DateTimeKind.Utc;
+                _builder.DefaultIsolationLevel = IsolationLevel.ReadCommitted;
+                _builder.DefaultTimeout = 30;
+                _builder.FailIfMissing = false;
+                _builder.UseUTF16Encoding = false;
+                _builder.Flags = SQLiteConnectionFlags.Default;
+                _builder.ForeignKeys = true;
+                _builder.JournalMode = SQLiteJournalModeEnum.Default;
+                _builder.LegacyFormat = false;
+                _builder.PageSize = 16*1024;
+                _builder.ReadOnly = false;
+                _builder.SyncMode = SynchronizationModes.Normal;
+                _builder.Version = 3;
+            }
 
             _compositeDisposable.Add(
                 Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
@@ -90,11 +100,23 @@ namespace Theodorus2.ViewModels
                     _result.OnNext(x);
                     _result.OnCompleted();
                 }));
+
+            var sdc = new ReactiveCommand();
+            _compositeDisposable.Add(
+            sdc.Subscribe(x =>
+            {
+                var nb = new SQLiteConnectionStringBuilder(_builder.ConnectionString) {DataSource = null};
+                _settings.SetValue("DefaultConnectionString", nb.ConnectionString);
+            }));
+            SetDefault = sdc;
+            _compositeDisposable.Add(sdc);
+
         }
 
         public ICommand BrowseCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
         public ICommand OkCommand { get; private set; }
+        public ICommand SetDefault { get; private set; }
 
         public IObservable<bool> Results
         {
