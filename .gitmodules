@@ -1,3 +1,6 @@
 [submodule "wiki"]
 	path = wiki
 	url = git@github.com:sillyotter/Theodorus2.wiki.git
+[submodule "site"]
+	path = site
+	url = git@github.com:sillyotter/Theodorus2.git
