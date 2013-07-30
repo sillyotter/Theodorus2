@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:Theodorus2.ViewModels"
         xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
-        xmlns:support="clr-namespace:Theodorus2.Support"
         xmlns:local="clr-namespace:Theodorus2.Properties"
         mc:Ignorable="d"
         Title="Theodorus SQLite Query Tool" 
