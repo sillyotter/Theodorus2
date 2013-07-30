@@ -25,7 +25,7 @@ namespace UnitTests.ViewModels
         [Fact]
         public void ConnectionDialogCancelTest()
         {
-            using (var target = new ConnectionDialogViewModel(new DummyFileSelectorService()))
+            using (var target = new ConnectionDialogViewModel(new DummyFileSelectorService(), new DummySettingsStorageService()))
             {
                 var res = new List<bool>();
                 target.Results.ToCollection(res);
@@ -37,7 +37,7 @@ namespace UnitTests.ViewModels
         [Fact]
         public void ConnectionDialogOkTest()
         {
-            using(var target = new ConnectionDialogViewModel(new DummyFileSelectorService()))
+            using (var target = new ConnectionDialogViewModel(new DummyFileSelectorService(), new DummySettingsStorageService()))
             {
                 var res = new List<bool>();
                 target.Results.ToCollection(res);
@@ -53,7 +53,7 @@ namespace UnitTests.ViewModels
         [Fact]
         public void TestBrowseCommand()
         {
-            using(var target = new ConnectionDialogViewModel(new DummyFileSelectorService()))
+            using (var target = new ConnectionDialogViewModel(new DummyFileSelectorService(), new DummySettingsStorageService()))
             {
                 target.BrowseCommand.Execute(null);
                 Assert.Equal("test.db", target.DataSource);
@@ -63,7 +63,7 @@ namespace UnitTests.ViewModels
         [Fact]
         public void ConnectionDialogAllValidators()
         {
-            using (var target = new ConnectionDialogViewModel(new DummyFileSelectorService()))
+            using (var target = new ConnectionDialogViewModel(new DummyFileSelectorService(), new DummySettingsStorageService()))
             {
                 var res = new List<bool>();
                 target.Results.ToCollection(res);

@@ -103,6 +103,14 @@ namespace UnitTests.ViewModels
             return (T)_storage[key];
         }
 
+        public bool TryGetValue<T>(string key, out T value)
+        {
+            object v;
+            var res = _storage.TryGetValue(key, out v);
+            value = (T)v;
+            return res;
+        }
+
         public void SetValue<T>(string key, T val)
         {
             _storage[key] = val;
