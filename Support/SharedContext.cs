@@ -14,7 +14,7 @@ namespace Theodorus2.Support
         private SharedContext()
         {
             Kernel = new StandardKernel();
-            RxApp.Initialize();
+            //RxApp.Initialize();
             RxApp.InitializeCustomResolver((obj, typ) => Kernel.Bind(typ).ToConstant(obj));
             Kernel.Load(AppDomain.CurrentDomain.GetAssemblies());
         }

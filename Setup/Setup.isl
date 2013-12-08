@@ -2650,7 +2650,7 @@
 		<col def="I2">Encoded</col>
 		<col def="S0">Comment</col>
 		<col def="I4">TimeStamp</col>
-		<row><td>COMPANY_NAME</td><td>1033</td><td>Theodorus</td><td>0</td><td/><td>-878593038</td></row>
+		<row><td>COMPANY_NAME</td><td>1033</td><td>Theodorus</td><td>0</td><td/><td>1176610926</td></row>
 		<row><td>DN_AlwaysInstall</td><td>1033</td><td>Always Install</td><td>0</td><td/><td>-878595086</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>1033</td><td>The color settings of your system are not adequate for running [ProductName].</td><td>0</td><td/><td>-878595086</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION45FULL</td><td>1033</td><td>Microsoft .NET Framework 4.5 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>-878615534</td></row>
@@ -3752,8 +3752,8 @@
 		<row><td>IDS__TargetReq_DESC_PROCESSOR</td><td>1033</td><td>The processor is not adequate for running [ProductName].</td><td>0</td><td/><td>-878595086</td></row>
 		<row><td>IDS__TargetReq_DESC_RAM</td><td>1033</td><td>The amount of RAM is not adequate for running [ProductName].</td><td>0</td><td/><td>-878595086</td></row>
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>1033</td><td>The screen resolution is not adequate for running [ProductName].</td><td>0</td><td/><td>-878595086</td></row>
-		<row><td>ID_STRING1</td><td>1033</td><td>https://github.com/sillyotter/Theodorus2</td><td>0</td><td/><td>-878636014</td></row>
-		<row><td>ID_STRING2</td><td>1033</td><td>Theodorus</td><td>0</td><td/><td>-878593038</td></row>
+		<row><td>ID_STRING1</td><td>1033</td><td>http://www.Theodorus.com</td><td>0</td><td/><td>1176610926</td></row>
+		<row><td>ID_STRING2</td><td>1033</td><td>Theodorus</td><td>0</td><td/><td>1176610926</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>1033</td><td>This feature will remain uninstalled.</td><td>0</td><td/><td>-878595086</td></row>
 	</table>
 
@@ -3995,7 +3995,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISTheme</td><td>InstallShield Blue.theme</td></row>
 		<row><td>ISUSLock</td><td>{1B6B1E5F-5B55-4928-9F3D-44CF46E44A87}</td></row>
 		<row><td>ISUSSignature</td><td>{0474FADF-A90A-4826-AC44-7876B482FA15}</td></row>
-		<row><td>ISVisitedViews</td><td>viewAssistant,viewObjects,viewProject,viewAppFiles,viewFeatureFiles,viewShortcuts,viewRealSetupDesign,viewUpgradePaths,viewSetupTypes,viewRelease</td></row>
+		<row><td>ISVisitedViews</td><td>viewAssistant,viewObjects,viewProject,viewAppFiles,viewFeatureFiles,viewShortcuts,viewRealSetupDesign,viewUpgradePaths,viewSetupTypes,viewRelease,viewDependencies,viewAppV,viewISToday</td></row>
 		<row><td>Limited</td><td>1</td></row>
 		<row><td>LockPermissionMode</td><td>1</td></row>
 		<row><td>MsiExecCmdLineOptions</td><td/></row>
