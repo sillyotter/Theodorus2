@@ -54,7 +54,7 @@ namespace Theodorus2.ViewModels
             else
             {
                 _builder.BinaryGUID = true;
-                _builder.CacheSize = 4096;
+                _builder.CacheSize = 4096*4;
                 _builder.DateTimeFormat = SQLiteDateFormats.ISO8601;
                 _builder.DateTimeFormatString = "o";
                 _builder.DateTimeKind = DateTimeKind.Utc;
@@ -66,7 +66,7 @@ namespace Theodorus2.ViewModels
                 _builder.ForeignKeys = true;
                 _builder.JournalMode = SQLiteJournalModeEnum.Default;
                 _builder.LegacyFormat = false;
-                _builder.PageSize = 16*1024;
+                _builder.PageSize = 4*1024;
                 _builder.ReadOnly = false;
                 _builder.SyncMode = SynchronizationModes.Normal;
                 _builder.Version = 3;

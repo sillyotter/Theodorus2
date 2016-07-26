@@ -138,7 +138,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     
-                    <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Cache Size (pages)</TextBlock>
+                    <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Cache Size (bytes)</TextBlock>
                     <xctk:IntegerUpDown Grid.Column="1" Grid.Row="0" FormatString="N0" Increment="1" MinHeight="1" 
                                         Value="{Binding Path=CacheSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
                     
