@@ -12,12 +12,12 @@ namespace UnitTests.Support
     public class SqliteQueryExecutionServiceTest
     {
         [Fact]
-        public void TestExecuteNoConStr()
+        public async Task TestExecuteNoConStr()
         {
             var mb = new MessageBus();
             var sr = new DefaultStatusReporter(mb);
             var target = new SqliteQueryExecutionService(sr, new DummySettingsStorageService());
-            Assert.Throws<InvalidOperationException>(() => target.Execute("select * from sqlite_master"));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => target.Execute("select * from sqlite_master"));
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace UnitTests.Support
             var mb = new MessageBus();
             var sr = new DefaultStatusReporter(mb);
             var target = new SqliteQueryExecutionService(sr, new DummySettingsStorageService()) { ConnectionString = "Data Source=:memory:" };
-            Assert.DoesNotThrow(() => target.Execute("select * from sqlite_master"));
+            target.Execute("select * from sqlite_master");
         }
 
         [Fact]

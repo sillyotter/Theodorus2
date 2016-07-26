@@ -4,14 +4,15 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
-using ReactiveUI;
+using ReactiveUI.Legacy;
 using Theodorus2.Support;
 using Xunit;
+using ReactiveCommand = ReactiveUI.Legacy.ReactiveCommand;
 
 namespace UnitTests.Support
 {
 #pragma warning disable 4014
-    public class ReactiveUIExtensionsTests
+    public class ReactiveUiExtensionsTests
     {
         [Fact]
         public async Task TestReactiveCommandExecuteCompleted()
@@ -202,7 +203,7 @@ namespace UnitTests.Support
             var x = 0;
 
             var sub = new Subject<bool>();
-            var cmd = ReactiveUIExtensions.CreateWithInitialCondition(sub, false);
+            var cmd = ReactiveUiExtensions.CreateWithInitialCondition(sub, false);
 
             cmd.RegisterAsyncTask(async o =>
             {

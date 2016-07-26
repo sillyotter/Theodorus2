@@ -7,6 +7,7 @@ using ICSharpCode.AvalonEdit.Document;
 using ReactiveUI;
 using Theodorus2.Interfaces;
 using Theodorus2.Support;
+using ReactiveCommand = ReactiveUI.Legacy.ReactiveCommand;
 
 namespace Theodorus2.ViewModels
 {
@@ -51,7 +52,13 @@ namespace Theodorus2.ViewModels
                 okCmd.Subscribe(x => Save())
                 );
         }
-        
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _compositeDisposable.Dispose();
+        }
+
         public IObservable<bool> Results
         {
             get { return _result; }

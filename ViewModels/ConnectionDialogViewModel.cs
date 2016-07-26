@@ -9,6 +9,7 @@ using System.Windows.Input;
 using ReactiveUI;
 using Theodorus2.Interfaces;
 using Theodorus2.Support;
+using ReactiveCommand = ReactiveUI.Legacy.ReactiveCommand;
 
 namespace Theodorus2.ViewModels
 {
@@ -33,6 +34,12 @@ namespace Theodorus2.ViewModels
         private static string EnsurePowerOfTwo(int val)
         {
             return (val & (val - 1)) != 0 ? "Value must be a power of two" : null;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _compositeDisposable.Dispose();
         }
 
         public ConnectionDialogViewModel(IFileSelectionService fileSelectionService, ISettingsStorageService settings)
@@ -118,10 +125,7 @@ namespace Theodorus2.ViewModels
         public ICommand OkCommand { get; private set; }
         public ICommand SetDefault { get; private set; }
 
-        public IObservable<bool> Results
-        {
-            get { return _result; }
-        }
+        public IObservable<bool> Results => _result;
 
         public string ConnectionString
         {
@@ -153,13 +157,13 @@ namespace Theodorus2.ViewModels
             }
         }
 
-        public bool UseUTF16Encoding
+        public bool UseUtf16Encoding
         {
             get { return _builder.UseUTF16Encoding; }
             set
             {
                 _builder.UseUTF16Encoding = value;
-                this.RaisePropertyChanged(x => x.UseUTF16Encoding);
+                this.RaisePropertyChanged(x => x.UseUtf16Encoding);
             }
         }
 
@@ -173,13 +177,13 @@ namespace Theodorus2.ViewModels
             }
         }
 
-        public bool BinaryGUID
+        public bool BinaryGuid
         {
             get { return _builder.BinaryGUID; }
             set
             {
                 _builder.BinaryGUID = value;
-                this.RaisePropertyChanged(x => x.BinaryGUID);
+                this.RaisePropertyChanged(x => x.BinaryGuid);
             }
         }
 

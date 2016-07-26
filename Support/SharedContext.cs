@@ -1,10 +1,9 @@
 ﻿using System;
 using Ninject;
-using ReactiveUI;
 
 namespace Theodorus2.Support
 {
-    class SharedContext
+    internal class SharedContext
     {
         private static readonly Lazy<SharedContext> SingletonInstance =
             new Lazy<SharedContext>(() => new SharedContext());
@@ -15,7 +14,7 @@ namespace Theodorus2.Support
         {
             Kernel = new StandardKernel();
             //RxApp.Initialize();
-            RxApp.InitializeCustomResolver((obj, typ) => Kernel.Bind(typ).ToConstant(obj));
+            //RxApp.InitializeCustomResolver((obj, typ) => Kernel.Bind(typ).ToConstant(obj));
             Kernel.Load(AppDomain.CurrentDomain.GetAssemblies());
         }
 

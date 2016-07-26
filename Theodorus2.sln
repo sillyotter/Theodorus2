@@ -1,21 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theodorus2", "Theodorus2.csproj", "{B3F44C94-57A4-405F-8825-8817EF378D33}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{03801B38-F99D-4044-AAFE-3F9EA4D46979}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{EB403DC8-7F68-459E-A280-5B0CA5BBD387}"
-EndProject
-Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Setup", "Setup\Setup.isproj", "{F8E1E7FC-C6A6-4236-BC88-253B86B39B7A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B3F44C94-57A4-405F-8825-8817EF378D33} = {B3F44C94-57A4-405F-8825-8817EF378D33}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,8 +21,6 @@ Global
 		{EB403DC8-7F68-459E-A280-5B0CA5BBD387}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB403DC8-7F68-459E-A280-5B0CA5BBD387}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB403DC8-7F68-459E-A280-5B0CA5BBD387}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F8E1E7FC-C6A6-4236-BC88-253B86B39B7A}.Debug|Any CPU.ActiveCfg = SingleImage
-		{F8E1E7FC-C6A6-4236-BC88-253B86B39B7A}.Release|Any CPU.ActiveCfg = SingleImage
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

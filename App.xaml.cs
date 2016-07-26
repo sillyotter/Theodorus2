@@ -18,7 +18,7 @@ namespace Theodorus2
             Settings.Default.Upgrade();
 
             AppDomain.CurrentDomain.UnhandledException +=
-                (o, args) => Log.ErrorException("Unhandled domain exception", (Exception)args.ExceptionObject);
+                (o, args) => Log.Error((Exception)args.ExceptionObject, "Unhandled domain exception");
 
 #if DEBUG
             LogManager.Configuration = new XmlLoggingConfiguration("NLog.Debug.config");

@@ -11,7 +11,7 @@ using ReactiveUI;
 
 namespace Theodorus2.Support
 {
-    public abstract class ValidatableReactiveObject<TSource> : ReactiveObject, INotifyDataErrorInfo, IDisposable
+    public abstract class ValidatableReactiveObject<TSource> : ReactiveObject, INotifyDataErrorInfo, IDisposable where TSource: class
     {
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
 
@@ -21,9 +21,11 @@ namespace Theodorus2.Support
         private readonly ConcurrentDictionary<string, List<string>> _errors =
             new ConcurrentDictionary<string, List<string>>();
 
+       
+
         protected void AddValidator<TValue>(Expression<Func<TSource, TValue>> selector, Func<string> validator)
         {
-            var props = Reflection.ExpressionToPropertyNames(selector).Single();
+            var props = ReactiveUiExtensions.GetPropName(selector);
 
             _validators.AddOrUpdate(
                 props,
@@ -61,7 +63,7 @@ namespace Theodorus2.Support
             {
                 return result;
             }
-            return new String[0];
+            return new string[0];
         }
 
         public bool HasErrors
@@ -73,11 +75,7 @@ namespace Theodorus2.Support
 
         private void OnErrorsChanged(DataErrorsChangedEventArgs e)
         {
-            var handler = ErrorsChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            ErrorsChanged?.Invoke(this, e);
         }
 
         public virtual void Dispose()

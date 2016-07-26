@@ -6,6 +6,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
+using ReactiveCommand = ReactiveUI.Legacy.ReactiveCommand;
 
 namespace Theodorus2.Support
 {
@@ -17,24 +18,21 @@ namespace Theodorus2.Support
         }
     }
 
-    public static class ReactiveUIExtensions
+    public static class ReactiveUiExtensions
     {
+        public static string GetPropName<TSource,TValue>(Expression<Func<TSource, TValue>> exp)
+        {
+            var expression = (MemberExpression)exp.Body;
+            return expression.Member.Name;
+        }
+
         public static void RaisePropertyChanged<TSource, TValue>(this TSource @this,
             params Expression<Func<TSource, TValue>>[] selectors) where TSource: ReactiveObject
         {
-            foreach (var pname in selectors.Select(Reflection.ExpressionToPropertyNames))
+            foreach (var pname in selectors.Select(GetPropName))
             {
-                @this.RaisePropertyChanged(pname.Single());
+                @this.RaisePropertyChanged(pname);
             }
-        }
-
-        public static IObservable<TSource> WhenPropertyChanged<TSource, TValue>(this IObservable<IObservedChange<TSource, TValue>> @this,
-            Expression<Func<TSource, TValue>> selector)
-        {
-            var pname = Reflection.ExpressionToPropertyNames(selector);
-            return @this
-                .Where(x => x.PropertyName == pname.Single())
-                .Select(x => x.Sender);
         }
 
         public static ReactiveCommand CreateWithInitialCondition(IObservable<bool> canExecute, bool initialCondition,

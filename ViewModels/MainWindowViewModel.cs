@@ -10,8 +10,10 @@ using System.Windows;
 using System.Windows.Input;
 using ICSharpCode.AvalonEdit.Document;
 using ReactiveUI;
+using ReactiveUI.Legacy;
 using Theodorus2.Interfaces;
 using Theodorus2.Support;
+using ReactiveCommand = ReactiveUI.Legacy.ReactiveCommand;
 
 namespace Theodorus2.ViewModels
 {
@@ -19,12 +21,11 @@ namespace Theodorus2.ViewModels
     {
         private readonly IQueryExecutionService _queryExecutor;
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
-        private readonly TextDocument _document = new TextDocument();
         private readonly Subject<bool> _dirtyState = new Subject<bool>();
         private readonly ObservableAsPropertyHelper<bool> _dirtyPropertyHelper;
         private readonly ObservableAsPropertyHelper<bool> _hasResultsPropertyHelper; 
 
-        private string _statusMessage = String.Empty;
+        private string _statusMessage = string.Empty;
         private bool _isWorking;
         private int _progress = -1;
         private bool _isProgressIndeterminate;
@@ -78,8 +79,8 @@ namespace Theodorus2.ViewModels
                 }));
 
             var textChanged = Observable.FromEventPattern<EventHandler, EventArgs>(
-                h => _document.TextChanged += h,
-                h => _document.TextChanged -= h);
+                h => Document.TextChanged += h,
+                h => Document.TextChanged -= h);
 
             _compositeDisposable.Add(
                 textChanged.Subscribe(x => _dirtyState.OnNext(true)));
@@ -88,7 +89,7 @@ namespace Theodorus2.ViewModels
             _compositeDisposable.Add(_dirtyPropertyHelper);
 
             var textExists = textChanged
-                .Select(_ => _document.TextLength > 0)
+                .Select(_ => Document.TextLength > 0)
                 .DistinctUntilChanged()
                 .StartWith(false);
 
@@ -146,12 +147,12 @@ namespace Theodorus2.ViewModels
                 }
                 catch (FileNotFoundException)
                 {
-                    userPromptingService.DisplayAlert(String.Format("The file {0} was not found.", fileName));
+                    userPromptingService.DisplayAlert($"The file {fileName} was not found.");
                     return;
                 }
                 catch (IOException)
                 {
-                    userPromptingService.DisplayAlert(String.Format("The file {0} was not read.", fileName));
+                    userPromptingService.DisplayAlert($"The file {fileName} was not read.");
                 }
 
                 Document.Text = data;
@@ -216,20 +217,11 @@ namespace Theodorus2.ViewModels
             set { this.RaiseAndSetIfChanged(ref _selectedText, value); }
         }
 
-        public bool HasResults
-        {
-            get { return _hasResultsPropertyHelper.Value; }
-        }
+        public bool HasResults => _hasResultsPropertyHelper.Value;
 
-        public bool IsDirty
-        {
-            get { return _dirtyPropertyHelper.Value; }
-        }
+        public bool IsDirty => _dirtyPropertyHelper.Value;
 
-        public bool IsConnected
-        {
-            get { return !String.IsNullOrWhiteSpace(_queryExecutor.ConnectionString); }            
-        }
+        public bool IsConnected => !String.IsNullOrWhiteSpace(_queryExecutor.ConnectionString);
 
         public string StatusMessage
         {
@@ -255,11 +247,8 @@ namespace Theodorus2.ViewModels
             private set { this.RaiseAndSetIfChanged(ref _isProgressIndeterminate, value); }
         }
 
-        public TextDocument Document
-        {
-            get { return _document; }
-        }
-    
+        public TextDocument Document { get; } = new TextDocument();
+
         public void Dispose()
         {
             _compositeDisposable.Dispose();

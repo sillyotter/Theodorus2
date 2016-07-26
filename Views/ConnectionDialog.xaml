@@ -189,13 +189,13 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Path=BinaryGUID,Mode=TwoWay}">Use Binary GUID?</CheckBox>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Path=BinaryGuid,Mode=TwoWay}">Use Binary GUID?</CheckBox>
                     <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding Path=Enlist,Mode=TwoWay}">Enlist in Transactions</CheckBox>
                     <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding Path=LegacyFormat,Mode=TwoWay}">Use Legacy Format</CheckBox>
                     <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding Path=Pooling,Mode=TwoWay}">Use Connection Pooling</CheckBox>
                     <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding Path=ForeignKeys,Mode=TwoWay}">Enforce Foreign Keys</CheckBox>
                     <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding Path=ReadOnly,Mode=TwoWay}">Read only</CheckBox>
-                    <CheckBox Grid.Row="6" Grid.Column="1" IsChecked="{Binding Path=UseUTF16Encoding,Mode=TwoWay}">Use UTF16 Encoding</CheckBox>
+                    <CheckBox Grid.Row="6" Grid.Column="1" IsChecked="{Binding Path=UseUtf16Encoding,Mode=TwoWay}">Use UTF16 Encoding</CheckBox>
                 </Grid>
             </GroupBox>
         </StackPanel>
