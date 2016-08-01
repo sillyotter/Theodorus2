@@ -7,6 +7,11 @@ namespace Theodorus2.Support
 {
     public class DefaultSettingsStorageService : ISettingsStorageService
     {
+        public DefaultSettingsStorageService()
+        {
+            //Settings.Default.Upgrade();
+        }
+
         public T GetValue<T>(string key)
         {
             return (T) Settings.Default[key];
@@ -30,6 +35,7 @@ namespace Theodorus2.Support
         public void SetValue<T>(string key, T val)
         {
             Settings.Default[key] = val;
+            //Settings.Default.Save();
         }
     }
 }
